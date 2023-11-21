@@ -1,0 +1,14 @@
+{
+    "name": "core/permission-groups",
+    "description": "Admin Panel User Groups Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aruna",
+            "email": "arunaswj@gmail.com"
+        }
+    ],
+    "require": {
+		"illuminate/support" : "~5"
+	}
+}

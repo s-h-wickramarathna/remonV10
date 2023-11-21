@@ -1,0 +1,17 @@
+{
+    "name": "application/outlet-list-management",
+    "description": "Admin Panel Outlet Management",
+    "license": "MIT",
+    "authors": [
+
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Application\\OutletListManagement\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

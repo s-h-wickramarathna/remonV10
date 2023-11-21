@@ -1,0 +1,18 @@
+<tr style="background-color: #d9534f;color: white" id="<%=rowID%>">
+    <td width="10%" style="padding-left: 6%"><%=row%></td>
+    <td width="15%"><%=orderID%></td>
+    <td width="30%" style="text-align: right"><%=amount%></td>
+    <td width="35%"><%=date%></td>
+    <td width="2%" style="padding-left: 0px;padding-right: 0px;">
+        <a onclick="discardOrder(<%=rowID%>)" data-toggle="tooltip" data-placement="top" title="Discard Order" style="padding: 5px;border-radius: 2px;border: solid;border-width: 1px;"><i
+                class="fa fa-trash-o"></i></a>
+    </td>
+    <td width="2%" style="padding-left: 0px;padding-right: 0px;">
+        <a onclick="viewDetail(<%=rowID%>)" data-toggle="tooltip" data-placement="top" title="View Order" style="padding: 5px;border-radius: 2px;border: solid;border-width: 1px;"><i
+                class="fa fa-eye"></i></a>
+    </td>
+    <td width="2%" style="padding-left: 0px;padding-right: 0px;">
+        <a onclick=""  href="edit/<%=rowID%>" data-toggle="tooltip" data-placement="top" title="Edit Order" style="padding: 5px;border-radius: 2px;border: solid;border-width: 1px;"><i
+                class="fa fa-pencil"></i></a>
+    </td>
+</tr>

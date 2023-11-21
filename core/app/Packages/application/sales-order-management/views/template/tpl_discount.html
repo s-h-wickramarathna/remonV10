@@ -1,0 +1,127 @@
+<style>
+    .panel-heading {
+        background-color: #3c3c3c;
+        color: #fff;
+    }
+</style>
+
+<section ng-app="AppModule">
+    <div class="panel-body">
+        <div class="panel panel-bordered panel-default">
+            <div class="panel-heading">
+                <label class="col-sm-3 control-label pull-right"
+                       style="text-align: left"
+                       id="max_dis"><strong>Max Percentage
+                    : <%=max_dis%>%</strong></label>
+                <label class="col-sm-3 control-label"
+                       style="text-align: left"
+                       ><strong>Open Discount</strong></label>
+            </div>
+            <div class="panel-body form-group">
+                <div class="col-sm-5">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>Discount</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text"
+                                           autocomplete="off"
+                                           class="form-control"
+                                           name="percentage_discount"
+                                           id="percentage_discount"
+                                           onkeydown="return validValue(this,event);"
+                                           placeholder="Percentage"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default disc_lock"
+                                                        type="button"
+                                                        id="disc_lock"><i
+                                                        class="fa fa-lock"></i>
+                                                </button>
+                                            </span>
+                                    <input type="hidden" id="disc_value">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text"
+                                           autocomplete="off"
+                                           class="form-control"
+                                           name="value_discount"
+                                           id="value_discount"
+                                           onkeydown="return validValue(this,event);"
+                                           placeholder="Value"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default disc_lock"
+                                                        type="button"
+                                                        id="disc_lock_2"><i
+                                                        class="fa fa-lock"></i>
+                                                </button>
+                                            </span>
+                                    <input type="hidden" id="disc_value_2">
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%
+    for(var i=0;i < data.length ;i++){
+    %>
+    <div ng-controller="AppController" class="panel-body">
+        <div class="panel panel-bordered panel-default">
+            <div class="panel-heading">
+                <strong><%=data[i].name%></strong>
+            </div>
+            <div class="panel-body form-group">
+                <div class="col-sm-12">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>#</td>
+                            <td>Discount Type</td>
+                            <td>Discount</td>
+                            <td>Action</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="disc">
+                            <td><input type="hidden" class="type" value="<%=data[i].id%>"><%=(i+1)%></td>
+                            <td><input type="hidden" class="type" value="<%=data[i].rule_id%>"><%=data[i].typeName%>
+                            </td>
+                            <td><input type="hidden" class="type" value="<%=data[i].rules.discount%>"><%if(data[i].discount_rule_type_id
+                                == 1 || data[i].discount_rule_type_id == 2){%> -
+                                <%}else{%><%=data[i].rules.discount%><%}%>
+                            </td>
+                            <td>
+                                <div class="checkbox checkbox-success">
+                                    <input type="hidden" class="calcHide" value="<%=i%>">
+                                    <input id="checkbox<%=i%>" class="styled calc" type="checkbox">
+                                    <label for="checkbox<%=i%>">
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%
+    }
+    %>
+</section>
+<script type="text/javascript">
+    function changeState(el) {
+        if (el.readOnly) el.checked = el.readOnly = false;
+        else if (!el.checked) el.readOnly = el.indeterminate = true;
+    }
+</script>

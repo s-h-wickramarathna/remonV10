@@ -1,0 +1,105 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": ["laravel", "framework"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "cartalyst/sentinel": "^7.0",
+        "doctrine/dbal": "^3.7",
+        "elibyy/tcpdf-laravel": "^10.0",
+        "gazsp/baum": "^2.0",
+        "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^2.7",
+        "laravel/framework": "^10.10",
+        "laravel/sanctum": "^3.2",
+        "laravel/tinker": "^2.8",
+        "laravelcollective/html": "^6.4",
+        "leakeung/barcode": "^3.0",
+        "maatwebsite/excel": "^3.1",
+        "milon/barcode": "^10.0",
+        "phpmailer/phpmailer": "^6.8",
+        "simplesoftwareio/simple-qrcode": "^4.2"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.9.1",
+        "laravel/pint": "^1.0",
+        "laravel/sail": "^1.18",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.1",
+        "spatie/laravel-ignition": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/",
+            "Core\\UserManage\\"     : "app/Packages/core/user-management/src/",
+			"Core\\MenuManage\\"     : "app/Packages/core/menu-management/src/",
+			"Core\\Permissions\\"    : "app/Packages/core/permissions/src/",
+			"Core\\UserRoles\\"      : "app/Packages/core/user-roles/src/",
+			"Core\\PriceBook\\"      : "app/Packages/core/price-book/src/",
+			"Core\\PermissionGroups\\" : "app/Packages/core/permission-groups/src",
+			"Core\\ModuleManage\\"        : "app/Packages/core/module-management/l5-modular/src/",
+
+            "Application\\EmployeeManage\\"      : "app/Packages/application/employee-management/src/",
+            "Application\\Product\\"             : "app/Packages/application/product/src/",
+            "Application\\AlbumSize\\"         : "app/Packages/application/album-size/src/",
+            "Application\\InvoiceManage\\"       : "app/Packages/application/invoice-management/src/",
+            "Application\\CustomerManage\\"       : "app/Packages/application/customer-management/src/",
+
+            "Application\\ProductCategory\\"     : "app/Packages/application/productCategory/src/",
+            "Application\\Functions\\"           : "app/Packages/application/function/",
+            "Application\\TargetManage\\"        : "app/Packages/application/target-management/src/",
+            "Application\\PaymentManage\\"       : "app/Packages/application/payment-management/src/",
+            "Application\\SalesOrderManage\\"    : "app/Packages/application/sales-order-management/src/",
+            "Application\\CommissionManage\\"    : "app/Packages/application/commission/src/",
+            "Application\\JobManage\\"    : "app/Packages/application/job-management/src/",
+            "Application\\AlbumType\\"         : "app/Packages/application/album-type/src/",
+            "Application\\AlbumBox\\"         : "app/Packages/application/album-box/src/",
+            "Application\\AlbumCover\\"         : "app/Packages/application/album-cover/src/",
+            "Application\\LaminateType\\"         : "app/Packages/application/album-laminate-type/src/",
+            "Application\\PaperType\\"         : "app/Packages/application/album-paper-type/src/",
+			"Application\\OutletListManagement\\": "app/Packages/application/outlet-list-management/src/",
+			"Application\\AccountManage\\": "app/Packages/application/account/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

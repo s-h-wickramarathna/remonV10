@@ -1,0 +1,42 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: USER
+ * Date: 12/16/2015
+ * Time: 1:40 PM
+ */
+
+namespace Application\PaymentManage\Models;
+
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ChequePayment extends Model
+{
+
+    /**
+     * table row delete
+     */
+    use SoftDeletes;
+
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'payment_cheques';
+
+    /**
+     * The attributes that are not assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
+
+    public function bank()
+    {
+      return $this->belongsTo('Application\PaymentManage\Models\Banks','cheque_bank_id','id');
+    }
+
+}

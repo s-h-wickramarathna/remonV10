@@ -1,0 +1,20 @@
+{
+    "name": "core/price-book",
+    "description": "Admin Panel Price Book Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sriya",
+            "email": "csriyarathne@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Core\\PriceBook\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

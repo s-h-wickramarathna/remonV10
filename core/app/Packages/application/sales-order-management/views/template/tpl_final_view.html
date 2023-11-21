@@ -1,0 +1,163 @@
+<style>
+    .panel-heading {
+        background-color: #3c3c3c;
+        color: #fff;
+    }
+
+    .form-group {
+        margin-bottom: 0px;
+    }
+
+</style>
+
+
+<div class="panel-body">
+    <div class="panel panel-bordered panel-default" style="min-height: 620px; max-height: 620px">
+        <div class="panel-heading">
+            <div class="col-sm-7">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label required" style="text-align: right">Job
+                            No</label>
+                        <div class="col-sm-8">
+                            <select class="form-control chosen" id="job_no" name="job_no">
+                                <option value="0">
+                                    Manual
+                                </option>
+                                <% for(var i=0;i<job_list.length;i++){%>
+                                <option value="<%=job_list[i].job_no%>"><%=job_list[i].job_no%></option>
+                                <%}%>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group alt_job_div">
+                        <label class="col-sm-4 control-label" style="text-align: right;"></label>
+                        <div class="col-sm-8">
+                            <input type="text" style="margin-top: 10px" placeholder="Type Manual Job No" class="form-control" id="alt_job" name="alt_job">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align: right">Invoice Date</label>
+                        <!--<label class="col-sm-8 control-label"
+                               style="text-align: left"><%=data.invoice.created_date%></label>-->
+                        <div class="col-sm-8">
+                            <input type="text" style="margin-top: 10px" placeholder="Invoice Date" class="form-control"  onkeydown="return false" id="invoice_date" name="invoice_date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align: right">Marketeer</label>
+                        <label class="col-sm-8 control-label" style="text-align: left"><%=marketeerArr[0].first_name +' '+marketeerArr[0].last_name%></label>
+                        <input type="hidden" id="marketeer" value="<%=marketeerArr[0].id%>">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align: right">Outlet</label>
+                        <label class="col-sm-8 control-label" style="text-align: left"><%=data.invoice.outlet%></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align: right">Address</label>
+                        <label class="col-sm-8 control-label"
+                               style="text-align: left"><%=data.invoice.outlet_address%></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="text-align: right">Couple
+                            Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="couple_name" name="couple_name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <textarea class="form-control" rows="10" placeholder="Comment" id="comment" name="comment"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body form-group">
+            <div class="col-sm-12" style="overflow-y: scroll;max-height: 450px;min-height: 450px">
+                <table class="table table-bordered bordered table-striped table-condensed">
+                    <thead style="background: rgba(204, 204, 204, 0.21);">
+                    <tr>
+                        <td width="4%">#</td>
+                        <td width="50%">Product</td>
+                        <td width="7%">U/Price</td>
+                        <td width="5%">Qty</td>
+                        <td width="7%">Disc</td>
+                        <td width="10%">L/Price</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                    function formatCurrency(str){
+                    var n= str.toString().split(".");
+                    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    if(n.length > 1){
+                    if(Number(n[1]) == 0){
+                    return n[0]+'.00';
+                    }else{
+                    n[1] = n[1] < 10 ? n[1]+'0':n[1]
+                    return n[0]+'.'+n[1];
+                    }
+                    }else{
+                    return n[0]+'.00';
+                    }
+
+                    }
+                    %>
+                    <% var index =1;console.log(data.invoiceDetail); for(var i=0;i
+                    <data.invoiceDetail.length
+                            ;i++){%>
+                        <%if(typeof data.invoiceDetail[i] != 'undefined' ){%>
+                        <tr class="disc">
+                            <td><%=(index++)%></td>
+                            <td><%=data.invoiceDetail[i].product_name%></td>
+                            <td style="text-align: right"><%=formatCurrency(data.invoiceDetail[i].unit_price)%></td>
+                            <td style="text-align: right"><%=data.invoiceDetail[i].qty%></td>
+                            <td style="text-align: right"><%=formatCurrency(data.invoiceDetail[i].discount)%></td>
+                            <td style="text-align: right">
+                                <%=formatCurrency((Number(data.invoiceDetail[i].unit_price)*Number(data.invoiceDetail[i].qty))-Number(data.invoiceDetail[i].discount))%>
+                            </td>
+                        </tr>
+
+                        <%}}%>
+                        <%for(var i=0;i
+                        <data.invoiceFreeIssue.length
+                                ;i++){ console.log(i);%>
+                            <%if(typeof data.invoiceFreeIssue[i] != 'undefined' ){%>
+                            <tr class="disc">
+                                <td><%=(index++)%></td>
+                                <td><%=data.invoiceFreeIssue[i].product_name%> (free)</td>
+                                <td style="text-align: right"><%=0.00%></td>
+                                <td style="text-align: right"><%=data.invoiceFreeIssue[i].qty%></td>
+                                <td style="text-align: right"><%=0.00%></td>
+                            </tr>
+                            <%}}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#invoice_date').datepicker({
+            format: "yyyy-mm-dd",
+            daysOfWeekHighlighted: "0,6",
+            calendarWeeks: true,
+            autoclose: true,
+            todayHighlight: true,
+            toggleActive: true
+        });
+
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        $( '#invoice_date' ).datepicker( 'setDate', today );
+
+
+    });
+</script>

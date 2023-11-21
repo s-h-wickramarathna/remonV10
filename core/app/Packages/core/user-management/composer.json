@@ -1,0 +1,20 @@
+{
+    "name": "core/user-management",
+    "description": "Admin Panel User Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yasith Samarawickrama",
+            "email": "yazith11@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Core\\UserManage\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

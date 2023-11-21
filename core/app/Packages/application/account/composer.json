@@ -1,0 +1,20 @@
+{
+    "name": "core/permissions",
+    "description": "Admin Panel Permission Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chathura Bandara",
+            "email": "chathunbandara@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Core\\Permissions\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

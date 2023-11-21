@@ -1,0 +1,46 @@
+
+<div class="box box-widget box-info" style="max-height: 260px;min-height: 260px;overflow-y: scroll">
+    <div class="box-header order-view with-border">
+        <div class="row">
+            <h3 style="margin-left:10px;margin-top:10px;padding: 0px " class="pull-left"><%=no%></h3>
+        </div>
+    </div>
+    <div class="box-body" >
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel">
+                    <div class="panel-body" style="padding-bottom: 0px;">
+                        <form role="form" class="form-validation">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-4 required" style="text-align: right"><%=textLabel%></label>
+
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" placeholder="Type here..." id="reason"
+                                                  name="reason" required></textarea>
+                                    </div>
+                                    <input type="hidden" value="<%=chequeNo%>" id="cheque_no" name="cheque_no">
+                                    <input type="hidden" value="<%=index%>" id="index" name="cheque_no">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2 col-md-offset-4">
+                                        <button type="button" class="btn btn-success" id="btnSave" name="btnSave" onclick="saveReject()" style="padding-top: 10px">
+                                            <i
+                                                    class="fa fa-floppy-o"
+                                                    style="padding-right: 16px;width: 28px;"></i>Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 0px;">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

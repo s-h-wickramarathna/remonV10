@@ -1,0 +1,52 @@
+
+<section ng-app="AppModule">
+    <%
+    function limitName(value){
+        return value.length>12?value.substring(0, 12)+'..':value;
+    }
+    for(var i=0;i < data.length ;i++){
+    %>
+
+    <div ng-controller="AppController" class="panel-body">
+        <div class="panel panel-bordered panel-default">
+            <div class="panel-heading" style="padding: 5px;">
+                <div class="col-sm-12 form-group" style="margin-bottom: 0px;">
+                    <label class="col-sm-5 control-label" style="text-align: left"><strong><%=data[i].name%></strong></label>
+                    <label class="col-sm-3 control-label" style="text-align: left"><strong>Total : <%=data[i].rules.outQty%></strong></label>
+                    <label class="col-sm-4 control-label available_<%=i%>" ><strong>Available : <%=data[i].rules.outQty%></strong></label>
+                </div>
+            </div>
+            <div class="panel-body form-group">
+                <div class="col-sm-12">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>IN</td>
+                            <td colspan="2">OUT</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <%
+                        var count = data[i].ingroup.length > data[i].outgroup.length ? data[i].ingroup.length : data[i].outgroup.length;
+                        for(var j=0;j < count ;j++){
+                        %>
+                        <tr class="free">
+                            <td><input type="hidden" class="product" value="<%=data[i].id%>"><%=data[i].ingroup.length>j?data[i].ingroup[j].product.short_code+' - '+limitName(data[i].ingroup[j].product.product_name):''%></td>
+                            <td><input type="hidden" class="product" value="<%=data[i].outgroup.length>j?data[i].outgroup[j].product.id+'-'+data[i].outgroup[j].product.product_name+'-'+data[i].outgroup[j].product.short_code:'0-0-0'%>"><%=data[i].outgroup.length>j?data[i].outgroup[j].product.short_code+' - '+limitName(data[i].outgroup[j].product.product_name):''%></td>
+                            <td><%=data[i].outgroup.length>j?'<input type="text" class="form-control calc calc_'+i+'"/>':''%><input type="hidden" class="calcHide" value="<%=i%>"></td>
+                        </tr>
+                        <%
+                        }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%
+    }
+
+    %>
+</section>

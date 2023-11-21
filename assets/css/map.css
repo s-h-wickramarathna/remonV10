@@ -1,0 +1,155 @@
+  
+ /*.content {
+	  min-height: 250px;
+	  padding: 0;
+	  margin-right: auto;
+	  margin-left: auto;
+  }*/
+
+  .control-sidebar{
+  	height: 100%;
+  }
+
+  .vehicle-active{
+  	background-color: #26cf26; 
+  	font-size: 12px;
+  }
+
+  .vehicle-inactive{
+  	background-color: #f9605a; 
+  	font-size: 12px;
+  }
+
+  .vehicle-no{
+  	font-size: 14px;
+	color: #414040;
+	font-weight: 800;
+  }
+
+  .driver-name{
+	font-size: 11px;
+	color: #5d5d5d;
+
+  }
+
+  .vehicle-item .fa{
+  	color: #414040;
+  }
+
+  .vehicle-item{
+  	cursor: pointer;
+  }
+
+    .box{
+  	  margin-bottom: 10px !important;
+    }
+
+    .updates{
+  	  color: #a5a5a5;
+    }
+
+	.control-sidebar-bg, .control-sidebar {
+	    top: 0;
+	    right: -330px;
+	    width: 330px !important;
+	    -webkit-transition: right 0.3s ease-in-out;
+	    -o-transition: right 0.3s ease-in-out;
+	    transition: right 0.3s ease-in-out;
+	}
+
+    .sidebar-controller{
+		position: absolute;
+		background:#222d32;
+		left: -34px;
+		top: 90px;
+		padding: 12px;
+		color: #fff;
+		border-radius: 20px 0px 0px 20px;
+	}
+
+  
+    .sidebar-controller .fa{
+	    color: #fff !important;
+	}
+
+	.control-sidebar-heading {
+	    font-weight: 400;
+	    font-size: 16px;
+	    padding: 0;
+	    margin-bottom: 10px;
+	    margin-top: 5px;
+	    padding-bottom: 10px;
+	}
+  	
+  	.filter-panel{
+  		padding: 5px 15px 0px 0px;
+  	}
+
+  	.custom-text-view{
+  		background-color: transparent !important;
+  		border: #5fb47e solid 1px !important; 
+  		color: #fff;
+  	}
+
+  	.map { 
+  		width: 100%; 
+  		display: block;
+  		height:300px;
+  	}
+
+  	.box-header > .fa, .box-header > .glyphicon, .box-header > .ion, .box-header .box-title {
+	    display: inline-block;
+	    font-size: 14px;
+	    margin: 0;
+	    line-height: 1;
+	}
+
+	.multimap h5{
+		font-weight: 300;
+	}
+
+	.multimap .box-header.with-border {
+	    padding: 2px 2px 0px 0px;
+	}
+
+	.box-header {
+	    color: #444;
+	    display: block;
+	    padding: 10px 0 0 10px;
+	    position: relative;
+	    font-size: 12px !important;
+	}
+
+ 	.multimap-driver-name {
+ 		padding: 0px 0px 0px 9px !important;
+ 		font-weight: 300 !important;
+ 		font-size:12px !important;
+ 	}
+ 	.control-sidebar-menu li {
+	    border-bottom: 1px solid #1e292d;
+	}
+  	
+  	.filter-panel{
+  		padding: 5px 15px 0px 0px;
+  	}
+
+  	.vehicles_list{
+  		color: #fff;
+  	}
+
+  	.vehicles_list p{
+  		color: #ddd;
+  		font-size: 11px;
+  	}
+
+  	.vehicles_list .fa {
+  		font-size: 20px;
+  		margin-right:10px; 
+  		position: relative;
+  		top: -2px;
+  	}
+
+  	.control-sidebar-menu > li > a {
+    display: block;
+    padding: 7px 15px;
+}

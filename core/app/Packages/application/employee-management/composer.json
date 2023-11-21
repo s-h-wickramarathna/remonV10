@@ -1,0 +1,20 @@
+{
+    "name": "application/employee-management",
+    "description": "Admin Panel Menu Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chathura Chandimal",
+            "email": "chandimal@craftbyorange.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Application\\EmployeeManage\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

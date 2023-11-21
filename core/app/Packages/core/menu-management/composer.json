@@ -1,0 +1,20 @@
+{
+    "name": "core/menu-management",
+    "description": "Admin Panel Menu Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yasith Samarawickrama",
+            "email": "yazith11@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Core\\MenuManage\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

@@ -1,0 +1,8 @@
+<?php
+
+
+Route::group(array('prefix'=>'test','module' => 'DummyUCtitle', 'namespace' => 'DummyNamespace\Controllers'), function() {
+
+    Route::resource('DummyTitle', 'DummyUCtitleController');
+    
+}); 

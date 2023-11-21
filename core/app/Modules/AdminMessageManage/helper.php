@@ -1,0 +1,4 @@
+<?php
+ /**
+ *	AdminMessageManage Helper  
+ */

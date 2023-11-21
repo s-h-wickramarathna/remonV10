@@ -1,0 +1,39 @@
+<style>
+
+</style>
+<section ng-app="AppModule">
+    <%
+    for(var i=0;i < id ;i++){
+    %>
+    <div ng-controller="AppController" class="panel-body">
+        <div class="panel panel-bordered panel-default">
+            <div class="panel-heading">
+                <strong><%=data.groupName[i]%></strong>
+            </div>
+            <div class="panel-body form-group">
+                <div class="col-sm-12">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>IN</td>
+                            <td>OUT</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>aaa</td>
+                            <td>bbb</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%
+    }
+    %>
+</section>
+<script type="text/javascript">
+
+</script>

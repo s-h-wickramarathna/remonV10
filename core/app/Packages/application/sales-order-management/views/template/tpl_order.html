@@ -1,0 +1,99 @@
+<script>
+    function castToNumber(str){
+        str = str.replace("Rs", "");
+        return isNaN == Number(str)?0:Number(str);
+    }
+
+
+</script>
+<div class="box box-widget box-info" style="max-height: 500px;min-height: 500px;overflow-y: scroll">
+    <div class="box-header order-view with-border">
+        <div class="row">
+            <h3 style="margin-left:10px;margin-top:10px;padding: 0px " class="pull-left"><%=orderNo%></h3>
+        </div>
+    </div>
+    <div class="box-body" >
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel">
+                    <div class="panel-body" style="padding-bottom: 0px;">
+                        <div class="form-group">
+                            <label class="col-sm-4" style="text-align: right">Invoice Date</label>
+                            <label class="col-sm-8" style="text-align: left"><%=date%></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4" style="text-align: right">Outlet</label>
+                            <label class="col-sm-8" style="text-align: left"><%=outlet%></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4" style="text-align: right">Address</label>
+                            <label class="col-sm-8" style="text-align: left"><%=address%></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4" style="text-align: right">Rep</label>
+                            <label class="col-sm-8" style="text-align: left"><%=rep%></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel">
+
+                    <div class="panel-body"
+                         style="padding-left: 12px;padding-top: 5px; padding-bottom: 5px;">
+                        <table>
+                            <thead style="background: #cacaca;background-color: #cacaca;border: 2px solid #cacaca;">
+                            <tr>
+                                <td height="30" style="padding-left: 5px;text-align: left;width: 100%;font-weight: bold">Item</td>
+                                <td height="30" style="padding-right: 5px;text-align: right;width: 20%;font-weight: bold">Amount</td>
+                            </tr>
+                            </thead>
+                            <tbody style="border: 2px solid #cacaca;">
+                            <%
+                                function formatCurrency(str){
+                                    var n= str.toString().split(".");
+                                    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    if(n.length > 1){
+                                        if(Number(n[1]) == 0){
+                                            return n[0]+'.00';
+                                        }else{
+                                            n[1] = n[1] < 10 ? n[1]+'0':n[1]
+                                            return n[0]+'.'+n[1];
+                                        }
+                                    }else{
+                                        return n[0]+'.00';
+                                    }
+
+                                }
+                            %>
+
+                            <% var total=0;for(var i=0;i<data.length;i++){%>
+                            <tr style="padding-top: 40px">
+                                <td  height="50"style="padding-left: 5px;text-align: left;width: 100%"><%=data[i].product.short_code+' - '+data[i].product.product_name+' '+data[i].product.pack_size%><br><%=data[i].qty%> x <%=data[i].unit_price  +'       Free('+data[i].free_qty+')'%></td>
+                                <td height="50" style="padding-right: 5px;text-align: right;width: 20%"><br><%=formatCurrency(data[i].qty*data[i].unit_price)%></td>
+                            </tr>
+
+                            <% total += (data[i].qty*data[i].unit_price) }%>
+                            <tr style="border-top: 2px solid #cacaca;">
+                                <td style="padding-right: 5px;text-align: right;width: 100%;font-weight: bold">Sub Total          :</td>
+                                <td style="padding-right: 5px;text-align: right;width: 20%;font-weight: bold"><%=formatCurrency(total)%></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right: 5px;text-align: right;width: 100%;font-weight: bold">Invoice Discount    :</td>
+                                <td style="padding-right: 5px;text-align: right;width: 20%;font-weight: bold"><%=formatCurrency(discount)%></td>
+                            </tr>
+                            <tr style="background: #cacaca;background-color: #cacaca;border: 2px solid #cacaca;">
+                                <td style="padding-right: 5px;text-align: right;width: 100%;font-weight: bold">Invoice Total       :</td>
+                                <td style="padding-right: 5px;text-align: right;width: 20%;font-weight: bold"><%=formatCurrency(total-discount)%></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

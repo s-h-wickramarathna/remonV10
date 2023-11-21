@@ -1,0 +1,18 @@
+<tr style="background-color: #5cb85c;color: white">
+    <td width="10%"><input class="checkGreen" id="<%=rowID%>" type="checkbox" onchange="changeCheck(<%=rowID%>);"> <%=row%></td>
+    <td width="15%"><%=orderID%></td>
+    <td width="30%" style="text-align: right"><%=amount%></td>
+    <td width="35%"><%=date%></td>
+    <td width="2%" style="padding-left: 0px;padding-right: 0px;">
+        <a onclick="discardOrder(<%=rowID%>)" data-toggle="tooltip" data-placement="top" title="Discard Order" style="padding: 5px;border-radius: 2px;border: solid;border-width: 1px;"><i
+                class="fa fa-trash-o"></i></a>
+    </td>
+    <td width="2%" style="padding-left: 0px;padding-right: 0px;">
+        <a onclick="viewDetail(<%=rowID%>)" data-toggle="tooltip" id="ad" data-placement="top" title="Edit Menu" style="padding: 5px;border-radius: 2px;border: solid;border-width: 1px;"><i
+                class="fa fa-eye"></i></a>
+    </td>
+    <td width="2%" style="padding-left: 0px;padding-right: 0px;">
+        <a  href="edit/<%=rowID%>"  onclick="" data-toggle="tooltip" data-placement="top" title="Edit Menu" style="padding: 5px;border-radius: 2px;border: solid;border-width: 1px;"><i
+                class="fa fa-pencil"></i></a>
+    </td>
+</tr>

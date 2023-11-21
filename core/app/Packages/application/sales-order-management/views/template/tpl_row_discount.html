@@ -1,0 +1,32 @@
+<div class="row">
+    <label class="col-sm-3 control-label ">Product Name</label>
+    <label class="col-sm-6 control-label " style="text-align: left"><%=product_name%></label>
+</div>
+<div class="row">
+    <label class="col-sm-3 control-label ">Line Amount</label>
+    <label class="col-sm-6 control-label " style="text-align: left"><%=lAmount%></label>
+</div>
+<div class="row">
+    <label class="col-sm-3 control-label ">Discount Type</label>
+    <div class="col-sm-6">
+        <input type="radio" name="type" checked value="Percentage">Percentage
+        <input type="radio" name="type" value="Value">Value
+    </div>
+</div>
+<div class="row per">
+    <label class="col-sm-3 control-label ">Discount</label>
+    <div class="col-sm-6">
+        <input type="text" class="form-control disc_per" name="disc_per" placeholder="%">
+    </div>
+</div>
+<div class="row val" hidden>
+    <label class="col-sm-3 control-label ">Discount</label>
+    <div class="col-sm-6">
+        <input type="text" class="form-control disc_val" name="disc_val" placeholder="0.00">
+        <input type="hidden" class="index" value="<%=index%>">
+    </div>
+</div>
+<div class="row">
+    <label class="col-sm-3 control-label ">Gross Amount</label>
+    <label class="col-sm-6 control-label lPrice" style="text-align: left"><%=lPrice%></label>
+</div>

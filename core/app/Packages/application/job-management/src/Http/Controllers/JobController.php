@@ -880,8 +880,8 @@ class JobController extends Controller
         $job_album = JobAlbum::where('job_id', $id)->get();
         $page = view('jobManage::print.job')->with(['job' => $job, 'job_data' => $job_data, 'job_album' => $job_album]);
         $page_2 = view('jobManage::print.cover')->with(['job' => $job, 'job_data' => $job_data, 'job_album' => $job_album]);
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -1988,8 +1988,8 @@ class JobController extends Controller
                 return response()->view("errors.404");
             }
 
-            $pdf = new PdfTemplate();
-            $pdf->SetMargins(28.35 / $pdf->k, 10);
+            $pdf = new PdfTemplate('P', 'mm', 'A4');
+            $pdf->SetMargins(28.35, 10);
             $pdf->SetFont('helvetica', '', 9);
             $pdf->SetAutoPageBreak(TRUE, 20);
             $pdf->AddPage();

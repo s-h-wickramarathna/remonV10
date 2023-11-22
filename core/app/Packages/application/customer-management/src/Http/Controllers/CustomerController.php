@@ -489,8 +489,8 @@ class CustomerController extends Controller
         //return $orders;
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();

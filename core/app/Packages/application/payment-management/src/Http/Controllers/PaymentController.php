@@ -931,8 +931,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -1394,8 +1394,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -1478,8 +1478,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -1618,8 +1618,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -1849,8 +1849,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -2057,8 +2057,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -2261,8 +2261,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -2478,8 +2478,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -2612,7 +2612,7 @@ class PaymentController extends Controller
             $orders = $orders->where('rc.area', $request->get('area'));
         }
 
-
+ 
         $orders = $orders->orderBy('rc.f_name', 'ASC');
         $orders = $orders->paginate(20);
 
@@ -2680,8 +2680,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -2877,8 +2877,8 @@ class PaymentController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();

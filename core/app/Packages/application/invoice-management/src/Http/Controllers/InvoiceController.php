@@ -1611,8 +1611,8 @@ class InvoiceController extends Controller
 
 //        $data = ['no' => $receipt->recipt_no];
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -1920,8 +1920,8 @@ class InvoiceController extends Controller
         $header = ['customer' => $customer, 'marketeer' => $marketeer, 'from' => $from, 'to' => $to, 'aging_date' => date('Y-m-d'), 'cus_all' => $cus_all, 'no' => $no, 'payment_type' => $payment_type];
 
         $view = view('invoiceManage::print.invoice-payment-aging')->with(['orders' => $orders, 'page_header' => $header]);
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();

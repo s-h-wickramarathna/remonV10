@@ -250,7 +250,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <?php $i = 1;?>
+                            <?php $i = 1; ?>
                             @foreach($orders as $order)
                                 <tr id="{{$i}}">
                                     <td>{{$i}}</td>
@@ -271,6 +271,7 @@
                             @endforeach
                             </tbody>
                         </table>
+                        <?php echo (count($orders)) ?>
                         @if(count($orders) > 0)
                             {!! $orders->render() !!}
                         @else

@@ -14,14 +14,13 @@ class AuthController extends Controller
     {
         try {
             if (!Sentinel::check()) {
-                // dd('user not athenticated');
                 return view('layouts.login');
+
             } else {
-                dd('authenticated');
                 $redirect = $request->session()->get('loginRedirect');
                 $request->session()->forget('loginRedirect');
-                dd($redirect);
-                // return redirect(url()->previous());
+                return redirect($redirect);
+
             }
         } catch (\Exception $e) {
             return view('layouts.login')->with(['login' => $e->getMessage()]);
@@ -48,18 +47,17 @@ class AuthController extends Controller
 
             if ($users) {
                 $user = Sentinel::authenticate($credentials, $remember);
-                // dd($user);
                 if ($user) {
 
                     if ($request->session()->exists('loginRedirect')) {
                         $redirect = $request->session()->get('loginRedirect');
                         $request->session()->forget('loginRedirect');
-                        // dd($redirect);
+
                         return redirect($redirect);
 
                     }else{
-                        // dd('/');
                         return redirect('/');
+                        
                     }
                     
                 } else {
@@ -77,7 +75,7 @@ class AuthController extends Controller
         ))->withInput($request->except('password'));
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         Sentinel::logout();
         return redirect()->route('login');

@@ -28,55 +28,52 @@ class WelcomeController extends Controller
         if ($user->id == 1 || $user->roles[0]->id == 1) {
             $target = MarketeerTarget::select(DB::raw('FORMAT(IFNULL(sum(value),0),2)as target'))->where('from', 'like', date('Y-m-01') . '%')->get();
             $target = $target[0]->target;
-            $inv_total = DB::table('invoice as inv')
-                ->select(
-                    DB::raw('IFNULL(SUM(invd.qty * invd.unit_price) - IFNULL(invdis.discount, 0), 0) as total'),
-                    DB::raw('COUNT(inv.id) as count')
-                )
-                ->join('invoice_detail as invd', 'inv.id', '=', 'invd.invoice_id')
-                ->leftJoin('invoice_discount as invdis', 'inv.id', '=', 'invdis.invoice_id')
-                ->groupBy('inv.id')
-                ->get();
-
-            // dd($inv_total);
-            $count = $inv_total->count();
-            $inv_total = number_format($inv_total->sum('total'), 2);
+            $inv_total = DB::select('SELECT
+                    format(ifnull(sum(tmp.total),0),2) as total,
+                    count(tmp.id) as count
+                FROM
+                    (SELECT
+                        (sum(invd.qty * invd.unit_price) - ifnull(invd.discount,0)) - ifnull((select discount from invoice_discount where invoice_id = inv.id limit 1),0) total,
+                        inv.id
+                    FROM
+                        invoice as inv
+                        inner join invoice_detail as invd on inv.id= invd.invoice_id
+                        group by inv.id) as tmp');
+            $count = $inv_total[0]->count;
+            $inv_total = $inv_total[0]->total;
             $job_count = Job::count();
 
-            // dd($count, $inv_totals);
+
         } else if ($user->roles[0]->id == 2) {
-            $target = MarketeerTarget::select(DB::raw('FORMAT(IFNULL(sum(value),0),2)as target'))->where('employee_id', $user->employee_id)->where('from', 'like', date('Y-m-01') . '%')->get();
+            $target = MarketeerTarget::select('FORMAT(IFNULL(sum(value),0),2)as target')->where('employee_id', $user->employee_id)->where('from', 'like', date('Y-m-01') . '%')->get();
             $target = $target[0]->target;
+            $inv_total = DB::select('SELECT
+                    format(ifnull(sum(tmp.total),0),2) as total,
+                    count(tmp.id) as count
+                FROM
+                    (SELECT
+                        (sum(invd.qty * invd.unit_price) - ifnull(invd.discount,0)) - ifnull((select discount from invoice_discount where invoice_id = inv.id limit 1),0) total,
+                        inv.id
+                    FROM
+                        invoice as inv
+                        inner join invoice_detail as invd on inv.id= invd.invoice_id
+                        where rep_id = ' . $user->employee_id . '
+                        group by inv.id) as tmp');
+            $count = $inv_total[0]->count;
+            $inv_total = 0.00;//$inv_total[0]->total;
 
-            $inv_total = $inv_total = DB::table('invoice as inv')
-            ->select(
-                DB::raw('IFNULL(SUM(invd.qty * invd.unit_price) - IFNULL(invdis.discount, 0), 0) as total'),
-                DB::raw('COUNT(inv.id) as count')
-            )
-            ->join('invoice_detail as invd', 'inv.id', '=', 'invd.invoice_id')
-            ->leftJoin('invoice_discount as invdis', 'inv.id', '=', 'invdis.invoice_id')
-            ->where('rep_id', $user->employee_id)
-            ->groupBy('inv.id')
-            ->get();
-            $count = $inv_total->count();
-            $inv_total = 0.00; //$inv_total[0]->total;
-
-            $job_count = $jobCount = Job::select(DB::raw('count(id) as job_count'))
-            ->where('customer_id', 'IN', function ($query) use ($user) {
-                $query->select('id')
-                    ->from('remon_customer')
-                    ->where('marketeer_id', $user->employee_id);
-            })
-            ->get();
+            $job_count = Job::select(DB::raw('count(id) as job_count'))->whereRaw('customer_id IN (select id from remon_customer where marketeer_id = ' . $user->employee_id . ')')->get();
             $job_count = $job_count[0]->job_count;
         } else {
             $target = '0.00';
             $inv_total = '0.00';
             $job_count = '0';
             $count = '0';
+
         }
 
         return view('dashboard')->with(['target' => $target, 'invoice_total' => $inv_total, 'invoice_count' => $count, 'job_count' => $job_count]);
+
     }
 
     public function get_employee()

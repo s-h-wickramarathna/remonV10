@@ -23,14 +23,12 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd($request);
+
         if (!Sentinel::check()) {
-            // dd($request->url());
             $request->session()->put('loginRedirect', $request->url());
-            // dd($request->session()->all());
             return redirect()->route('login');
+
         } else {
-            // dd('user athenticated');
             $user = Sentinel::getUser();
             $action = Route::currentRouteName();
             $permissions = Permission::whereIn('name', [$action, 'admin'])->where('status', 1)->pluck('name');

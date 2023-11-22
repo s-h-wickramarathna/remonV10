@@ -134,15 +134,15 @@ class OverpaidHandler
 
         if ($location_id) {
 
-           $aa = DB::table('overpayments')
-                ->where('location_id', $location_id)
-                ->get(['SUM(CASE WHEN reference_id = 1 OR reference_id = 4 THEN amount ELSE 0 END) cash_overpaid',
-                    'SUM(CASE WHEN reference_id = 2 OR reference_id = 5 THEN amount ELSE 0 END) cheque_overpaid',
-                    'SUM(CASE WHEN reference_id = 3 THEN amount ELSE 0 END) return_overpaid',
-                    'SUM(CASE WHEN reference_id = 6 OR reference_id = 8 THEN amount ELSE 0 END) online_overpaid',
-                    'SUM(CASE WHEN reference_id = 7 OR reference_id = 9 THEN amount ELSE 0 END) cash_deposit_overpaid']);
-
-        }
+            $aa = DB::table('overpayments')
+                 ->where('location_id', $location_id)
+                 ->get([DB::raw('SUM(CASE WHEN reference_id = 1 OR reference_id = 4 THEN amount ELSE 0 END) cash_overpaid'),
+                     DB::raw('SUM(CASE WHEN reference_id = 2 OR reference_id = 5 THEN amount ELSE 0 END) cheque_overpaid'),
+                     DB::raw('SUM(CASE WHEN reference_id = 3 THEN amount ELSE 0 END) return_overpaid'),
+                     DB::raw('SUM(CASE WHEN reference_id = 6 OR reference_id = 8 THEN amount ELSE 0 END) online_overpaid'),
+                     DB::raw('SUM(CASE WHEN reference_id = 7 OR reference_id = 9 THEN amount ELSE 0 END) cash_deposit_overpaid')]);
+ 
+         }
 
         return [
             "cash_overpaid" => $aa[0]->cash_overpaid,

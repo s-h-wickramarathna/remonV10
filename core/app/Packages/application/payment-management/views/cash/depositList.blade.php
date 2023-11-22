@@ -271,7 +271,6 @@
                             @endforeach
                             </tbody>
                         </table>
-                        <?php echo (count($orders)) ?>
                         @if(count($orders) > 0)
                             {!! $orders->render() !!}
                         @else

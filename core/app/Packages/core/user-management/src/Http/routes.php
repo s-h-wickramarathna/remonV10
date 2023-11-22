@@ -1,30 +1,62 @@
 <?php
-
+/**
+ * MENU MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Chathura Chandimal <chandimal@craftbyorange.com>
+ * @copyright 2015 Chathura Chandimal
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-use Core\UserManage\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'user', 'namespace' => 'Core\UserManage\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'user.add', 'uses' => 'UserController@addView'
+      ]);
 
-Route::group(['middleware' => ['auth', 'web']], function () {
-    Route::group(['prefix' => 'user', 'namespace' => 'Core\UserManage\Http\Controllers'], function () {
+      Route::get('edit/{id}', [
+          'as' => 'user.edit', 'uses' => 'UserController@editView'
+      ]);
 
-        /**
-         * GET Routes
-         */
-        Route::get('add', [UserController::class, 'addView'])->name('user.add');
-        Route::get('edit/{id}', [UserController::class, 'editView'])->name('user.edit');
-        Route::get('list', [UserController::class, 'listView'])->name('user.list');
-        Route::get('json/list', [UserController::class, 'jsonList'])->name('user.jsonList');
-        Route::get('change', [UserController::class, 'changeLogin'])->name('login.change');
+      Route::get('list', [
+        'as' => 'user.list', 'uses' => 'UserController@listView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [UserController::class, 'add'])->name('user.store');
-        Route::post('edit/{id}', [UserController::class, 'edit'])->name('user.update');
-        Route::post('status', [UserController::class, 'status'])->name('user.status');
-        Route::post('delete', [UserController::class, 'delete'])->name('user.delete');
-        Route::post('change', [UserController::class, 'change'])->name('login.change');
+      Route::get('json/list', [
+        'as' => 'user.list', 'uses' => 'UserController@jsonList'
+      ]);
+
+      Route::get('change', [
+          'as' => 'login.change', 'uses' => 'UserController@changeLogin'
+      ]);
+
+      /**
+       * POST Routes
+       */
+      Route::post('add', [
+        'as' => 'user.add', 'uses' => 'UserController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+          'as' => 'user.edit', 'uses' => 'UserController@edit'
+      ]);
+
+      Route::post('status', [
+        'as' => 'user.status', 'uses' => 'UserController@status'
+      ]);
+
+      Route::post('delete', [
+        'as' => 'user.delete', 'uses' => 'UserController@delete'
+      ]);
+
+      Route::post('change', [
+          'as' => 'login.change', 'uses' => 'UserController@change'
+      ]);
     });
 });

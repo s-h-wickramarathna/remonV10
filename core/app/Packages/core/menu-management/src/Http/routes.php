@@ -1,28 +1,54 @@
 <?php
-
+/**
+ * MENU MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Yasith Samarawickrama <yazith11@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-use Core\MenuManage\Http\Controllers\MenuController;
-use Illuminate\Support\Facades\Route;
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'menu', 'namespace' => 'Core\MenuManage\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'menu.add', 'uses' => 'MenuController@addView'
+      ]);
 
-Route::group(['middleware' => ['auth', 'web']], function () {
-    Route::group(['prefix' => 'menu', 'namespace' => 'Core\MenuManage\Http\Controllers'], function () {
+      Route::get('edit/{id}', [
+        'as' => 'menu.edit', 'uses' => 'MenuController@editView'
+      ]);
 
-        /**
-         * GET Routes
-         */
-        Route::get('add', [MenuController::class, 'addView'])->name('menu.add');
-        Route::get('edit/{id}', [MenuController::class, 'editView'])->name('menu.edit');
-        Route::get('list', [MenuController::class, 'listView'])->name('menu.list');
-        Route::get('json/list', [MenuController::class, 'jsonList'])->name('menu.jsonList');
+      Route::get('list', [
+        'as' => 'menu.list', 'uses' => 'MenuController@listView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [MenuController::class, 'add'])->name('menu.store');
-        Route::post('edit/{id}', [MenuController::class, 'edit'])->name('menu.update');
-        Route::post('status', [MenuController::class, 'status'])->name('menu.status');
-        Route::post('delete', [MenuController::class, 'delete'])->name('menu.delete');
+      Route::get('json/list', [
+        'as' => 'menu.list', 'uses' => 'MenuController@jsonList'
+      ]);
+
+      /**
+       * POST Routes
+       */
+      Route::post('add', [
+        'as' => 'menu.add', 'uses' => 'MenuController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'menu.edit', 'uses' => 'MenuController@edit'
+      ]);
+
+      Route::post('status', [
+        'as' => 'menu.status', 'uses' => 'MenuController@status'
+      ]);
+
+      Route::post('delete', [
+        'as' => 'menu.delete', 'uses' => 'MenuController@delete'
+      ]);
     });
 });

@@ -1,28 +1,53 @@
 <?php
-use Application\AlbumBox\Http\Controllers\BoxController;
+/**
+
+ */
+
 use Illuminate\Support\Facades\Route;
 
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('albumbox')->namespace('Application\AlbumBox\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [BoxController::class, 'addView'])->name('box.add');
-        Route::get('edit/{id}', [BoxController::class, 'editView'])->name('box.edit'); // Not Implemented Yet
-        Route::get('list', [BoxController::class, 'listView'])->name('box.list');
-        Route::get('json/list', [BoxController::class, 'jsonList'])->name('box.list');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'albumbox', 'namespace' => 'Application\AlbumBox\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'box.add', 'uses' => 'BoxController@addView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [BoxController::class, 'add'])->name('box.add');
-        Route::post('edit/{id}', [BoxController::class, 'edit'])->name('box.edit');
-        Route::post('status', [BoxController::class, 'status'])->name('box.status');
+      Route::get('edit/{id}', [
+        'as' => 'box.edit', 'uses' => 'BoxController@editView'  // Not Implemented Yet
+      ]);
+      Route::get('list', [
+        'as' => 'box.list', 'uses' => 'BoxController@listView'
+      ]);
 
-        // Uncomment the following route if needed
-        // Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+        Route::get('json/list', [
+            'as' => 'box.list', 'uses' => 'BoxController@jsonList'
+        ]);
+
+
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'box.add', 'uses' => 'BoxController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'box.edit', 'uses' => 'BoxController@edit'
+      ]);
+
+      Route::post('status', [
+        'as' => 'box.status', 'uses' => 'BoxController@status'
+      ]);
+
+//      Route::post('delete', [
+//        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+//      ]);
     });
 });

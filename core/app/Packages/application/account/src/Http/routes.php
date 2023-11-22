@@ -4,30 +4,56 @@
  * USER AUTHENTICATION MIDDLEWARE
  */
 
-use Application\AccountManage\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('account')->namespace('Application\AccountManage\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [ControllersAccountController::class, 'addView'])->name('account.add');
-        Route::get('edit/{id}', [AccountController::class, 'editView'])->name('account.edit'); // Not Implemented Yet
-        Route::get('list', [AccountController::class, 'listView'])->name('account.list');
-        Route::get('json/list', [AccountController::class, 'jsonList'])->name('product.list');
-        Route::get('json/listcode', [AccountController::class, 'listcode'])->name('product.add');
-        Route::get('json/listproductcat', [AccountController::class, 'listproductcat'])->name('product.add');
-        Route::get('exceltolist', [AccountController::class, 'exceltolist'])->name('product.add');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'account', 'namespace' => 'Application\AccountManage\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'account.add', 'uses' => 'AccountController@addView'
+      ]);
+      Route::get('edit/{id}', [
+        'as' => 'account.edit', 'uses' => 'AccountController@editView'  // Not Implemented Yet
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [AccountController::class, 'add'])->name('account.add');
-        Route::post('edit/{id}', [AccountController::class, 'edit'])->name('product.edit'); // Not Implemented Yet
-        Route::post('status', [AccountController::class, 'status'])->name('product.status');
+      Route::get('list', [
+        'as' => 'account.list', 'uses' => 'AccountController@listView'
+      ]);
 
-        // Uncomment the following route if needed
-        // Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+      Route::get('json/list', [
+        'as' => 'product.list', 'uses' => 'AccountController@jsonList'
+      ]);
+
+      Route::get('json/listcode', [
+          'as' => 'product.add', 'uses' => 'AccountController@listcode'
+      ]);
+      Route::get('json/listproductcat', [
+          'as' => 'product.add', 'uses' => 'AccountController@listproductcat'
+      ]);
+        Route::get('exceltolist', [
+            'as' => 'product.add', 'uses' => 'AccountController@exceltolist'
+        ]);
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'account.add', 'uses' => 'AccountController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'product.edit', 'uses' => 'AccountController@edit'  // Not Implemented Yet
+      ]);
+
+      Route::post('status', [
+        'as' => 'product.status', 'uses' => 'AccountController@status'
+      ]);
+
+//      Route::post('delete', [
+//        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+//      ]);
     });
 });

@@ -1,26 +1,51 @@
 <?php
-use Application\OutletListManagement\Http\Controllers\OutletListManagementController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'web'])->group(function () {
 
-    Route::prefix('reports/customer')->namespace('Application\OutletListManagement\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('list', [OutletListManagementController::class, 'listView'])->name('outlet-management.list');
-        Route::get('download', [OutletListManagementController::class, 'download'])->name('outlet-management.list');
-        Route::get('detail/{id}', [OutletListManagementController::class, 'detailView'])->name('outlet-management.details');
+Route::group(['middleware' => ['auth','web']], function()
+{
 
-        /**
-         * POST Routes
-         */
-        Route::post('changeOutlatLocation', [OutletListManagementController::class, 'changeOutlatLocation'])->name('changeOutlatLocation');
+    Route::group(['prefix' => 'reports/customer', 'namespace' => 'Application\OutletListManagement\Http\Controllers'], function(){
+          /**
+           * GET Routes
+           */
 
-        /**
-         * JSON Routes
-         */
-        Route::get('json/getOutlets', [OutletListManagementController::class, 'getOutlets'])->name('outlet-management.list');
-        Route::get('json/getOutletInvoices', [OutletListManagementController::class, 'getOutletInvoices'])->name('outlet-management.list');
-    });
+          Route::get('list', [
+              'as' => 'outlet-management.list',
+              'uses' => 'OutletListManagementController@listView'
+          ]);
+
+        Route::get('download', [
+            'as' => 'outlet-management.list',
+            'uses' => 'OutletListManagementController@download'
+        ]);
+
+
+        Route::get('detail/{id}', [
+              'as' => 'outlet-management.details',
+              'uses' => 'OutletListManagementController@detailView'
+          ]);
+
+          /**
+          * POST Routes
+          */
+          Route::post('changeOutlatLocation', [
+            'uses' => 'OutletListManagementController@changeOutlatLocation',
+            'as'   => 'changeOutlatLocation'
+          ]);
+
+          /**
+          * JSON Routes
+          */
+          Route::get('json/getOutlets', [
+              'as' => 'outlet-management.list',
+              'uses' => 'OutletListManagementController@getOutlets'
+          ]);  
+
+          Route::get('json/getOutletInvoices', [
+              'as' => 'outlet-management.list',
+              'uses' => 'OutletListManagementController@getOutletInvoices'
+          ]);  
+
+        });
 });

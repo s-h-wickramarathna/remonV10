@@ -24,60 +24,59 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        // $user = Sentinel::getUser();
-        // if ($user->id == 1 || $user->roles[0]->id == 1) {
-        //     $target = MarketeerTarget::select(DB::raw('FORMAT(IFNULL(sum(value),0),2)as target'))->where('from', 'like', date('Y-m-01') . '%')->get();
-        //     $target = $target[0]->target;
-        //     $inv_total = DB::table('invoice as inv')
-        //         ->select(
-        //             DB::raw('IFNULL(SUM(invd.qty * invd.unit_price) - IFNULL(invdis.discount, 0), 0) as total'),
-        //             DB::raw('COUNT(inv.id) as count')
-        //         )
-        //         ->join('invoice_detail as invd', 'inv.id', '=', 'invd.invoice_id')
-        //         ->leftJoin('invoice_discount as invdis', 'inv.id', '=', 'invdis.invoice_id')
-        //         ->groupBy('inv.id')
-        //         ->get();
+        $user = Sentinel::getUser();
+        if ($user->id == 1 || $user->roles[0]->id == 1) {
+            $target = MarketeerTarget::select(DB::raw('FORMAT(IFNULL(sum(value),0),2)as target'))->where('from', 'like', date('Y-m-01') . '%')->get();
+            $target = $target[0]->target;
+            $inv_total = DB::table('invoice as inv')
+                ->select(
+                    DB::raw('IFNULL(SUM(invd.qty * invd.unit_price) - IFNULL(invdis.discount, 0), 0) as total'),
+                    DB::raw('COUNT(inv.id) as count')
+                )
+                ->join('invoice_detail as invd', 'inv.id', '=', 'invd.invoice_id')
+                ->leftJoin('invoice_discount as invdis', 'inv.id', '=', 'invdis.invoice_id')
+                ->groupBy('inv.id')
+                ->get();
 
-        //     // dd($inv_total);
-        //     $count = $inv_total->count();
-        //     $inv_total = number_format($inv_total->sum('total'), 2);
-        //     $job_count = Job::count();
+            // dd($inv_total);
+            $count = $inv_total->count();
+            $inv_total = number_format($inv_total->sum('total'), 2);
+            $job_count = Job::count();
 
-        //     // dd($count, $inv_totals);
-        // } else if ($user->roles[0]->id == 2) {
-        //     $target = MarketeerTarget::select(DB::raw('FORMAT(IFNULL(sum(value),0),2)as target'))->where('employee_id', $user->employee_id)->where('from', 'like', date('Y-m-01') . '%')->get();
-        //     $target = $target[0]->target;
+            // dd($count, $inv_totals);
+        } else if ($user->roles[0]->id == 2) {
+            $target = MarketeerTarget::select(DB::raw('FORMAT(IFNULL(sum(value),0),2)as target'))->where('employee_id', $user->employee_id)->where('from', 'like', date('Y-m-01') . '%')->get();
+            $target = $target[0]->target;
 
-        //     $inv_total = $inv_total = DB::table('invoice as inv')
-        //     ->select(
-        //         DB::raw('IFNULL(SUM(invd.qty * invd.unit_price) - IFNULL(invdis.discount, 0), 0) as total'),
-        //         DB::raw('COUNT(inv.id) as count')
-        //     )
-        //     ->join('invoice_detail as invd', 'inv.id', '=', 'invd.invoice_id')
-        //     ->leftJoin('invoice_discount as invdis', 'inv.id', '=', 'invdis.invoice_id')
-        //     ->where('rep_id', $user->employee_id)
-        //     ->groupBy('inv.id')
-        //     ->get();
-        //     $count = $inv_total->count();
-        //     $inv_total = 0.00; //$inv_total[0]->total;
+            $inv_total = $inv_total = DB::table('invoice as inv')
+            ->select(
+                DB::raw('IFNULL(SUM(invd.qty * invd.unit_price) - IFNULL(invdis.discount, 0), 0) as total'),
+                DB::raw('COUNT(inv.id) as count')
+            )
+            ->join('invoice_detail as invd', 'inv.id', '=', 'invd.invoice_id')
+            ->leftJoin('invoice_discount as invdis', 'inv.id', '=', 'invdis.invoice_id')
+            ->where('rep_id', $user->employee_id)
+            ->groupBy('inv.id')
+            ->get();
+            $count = $inv_total->count();
+            $inv_total = 0.00; //$inv_total[0]->total;
 
-        //     $job_count = $jobCount = Job::select(DB::raw('count(id) as job_count'))
-        //     ->where('customer_id', 'IN', function ($query) use ($user) {
-        //         $query->select('id')
-        //             ->from('remon_customer')
-        //             ->where('marketeer_id', $user->employee_id);
-        //     })
-        //     ->get();
-        //     $job_count = $job_count[0]->job_count;
-        // } else {
-        //     $target = '0.00';
-        //     $inv_total = '0.00';
-        //     $job_count = '0';
-        //     $count = '0';
-        // }
+            $job_count = $jobCount = Job::select(DB::raw('count(id) as job_count'))
+            ->where('customer_id', 'IN', function ($query) use ($user) {
+                $query->select('id')
+                    ->from('remon_customer')
+                    ->where('marketeer_id', $user->employee_id);
+            })
+            ->get();
+            $job_count = $job_count[0]->job_count;
+        } else {
+            $target = '0.00';
+            $inv_total = '0.00';
+            $job_count = '0';
+            $count = '0';
+        }
 
-        // return view('dashboard')->with(['target' => $target, 'invoice_total' => $inv_total, 'invoice_count' => $count, 'job_count' => $job_count]);
-        return view('dashboard')->with(['target' => 10, 'invoice_total' => 10, 'invoice_count' => 10, 'job_count' => 10]);
+        return view('dashboard')->with(['target' => $target, 'invoice_total' => $inv_total, 'invoice_count' => $count, 'job_count' => $job_count]);
     }
 
     public function get_employee()

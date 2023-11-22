@@ -1,25 +1,40 @@
 <?php
-
+/**
+ * PRICE-BOOK MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Sriya <csriyarathne@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * PRICE BOOK MIDDLEWARE
  */
-use Core\PriceBook\Http\Controllers\PriceBookController;
-use Illuminate\Support\Facades\Route;
-
-Route::group(['middleware' => ['auth', 'web']], function () {
+Route::group(['middleware' => ['auth','web']], function () {
     Route::group(['prefix' => 'price/type', 'namespace' => 'Core\PriceBook\Http\Controllers'], function () {
 
         /**
          * GET Routes
          */
-        Route::get('add', [PriceBookController::class, 'addPriceBookTypeView'])->name('price.type.add');
-        Route::get('json/list', [PriceBookController::class, 'jsonListPriceBookType'])->name('price.type.list');
+        Route::get('add', [
+            'as' => 'price.type.add', 'uses' => 'PriceBookController@addPriceBookTypeView'
+        ]);
+
+        Route::get('json/list', [
+            'as' => 'price.type.list', 'uses' => 'PriceBookController@jsonListPriceBookType'
+        ]);
 
         /**
          * POST Routes
          */
-        Route::post('add', [PriceBookController::class, 'addPriceBookType'])->name('price.type.store');
-        Route::post('edit', [PriceBookController::class, 'editPriceBookType'])->name('price.type.edit');
+        Route::post('add', [
+            'as' => 'price.type.add', 'uses' => 'PriceBookController@addPriceBookType'
+        ]);
+
+        Route::post('edit', [
+            'as' => 'price.type.edit', 'uses' => 'PriceBookController@editPriceBookType'
+        ]);
+
     });
 
 
@@ -28,21 +43,53 @@ Route::group(['middleware' => ['auth', 'web']], function () {
         /**
          * GET Routes
          */
-        Route::get('add', [PriceBookController::class, 'addStanderdPriceBookView'])->name('price.standerd.add');
-        Route::get('edit/{id}', [PriceBookController::class, 'editStanderdPriceBookView'])->name('price.standerd.edit');
-        Route::get('json/list', [PriceBookController::class, 'jsonListProduct'])->name('price.standerd.list');
-        Route::get('json/productList', [PriceBookController::class, 'jsonListProductDetail'])->name('price.standerd.listProduct');
-        Route::get('list', [PriceBookController::class, 'listStanderdPriceBookView'])->name('price.standerd.list');
-        Route::get('json/listPriceBook', [PriceBookController::class, 'jsonListStanderdPriceBook'])->name('price.standerd.listPriceBook');
-        Route::get('json/listPriceBookDetail/{id}', [PriceBookController::class, 'jsonListStanderdPriceBookDetail'])->name('price.standerd.listPriceBookDetail');
-        Route::get('json/standardProductList', [PriceBookController::class, 'jsonProductList'])->name('price.standerd.listProductList');
-        Route::get('check-mrp', [PriceBookController::class, 'checkMrp'])->name('price.standerd.check-mrp');
+        Route::get('add', [
+            'as' => 'price.standerd.add', 'uses' => 'PriceBookController@addStanderdPriceBookView'
+        ]);
+
+        Route::get('edit/{id}', [
+            'as' => 'price.standerd.edit', 'uses' => 'PriceBookController@editStanderdPriceBookView'
+        ]);
+
+        Route::get('json/list', [
+            'as' => 'price.standerd.list', 'uses' => 'PriceBookController@jsonListProduct'
+        ]);
+
+        Route::get('json/productList', [
+            'as' => 'price.standerd.list', 'uses' => 'PriceBookController@jsonListProductDetail'
+        ]);
+
+        Route::get('list', [
+            'as' => 'price.standerd.list', 'uses' => 'PriceBookController@listStanderdPriceBookView'
+        ]);
+
+        Route::get('json/listPriceBook', [
+            'as' => 'price.standerd.list', 'uses' => 'PriceBookController@jsonListStanderdPriceBook'
+        ]);
+
+        Route::get('json/listPriceBookDetail/{id}', [
+            'as' => 'price.standerd.list', 'uses' => 'PriceBookController@jsonListStanderdPriceBookDetail'
+        ]);
+
+        Route::get('json/standardProductList', [
+            'as' => 'price.standerd.list', 'uses' => 'PriceBookController@jsonProductList'
+        ]);
+
+        Route::get('check-mrp', [
+            'as' => 'price.standerd.check-mrp', 'uses' => 'PriceBookController@checkMrp'
+        ]);
 
         /**
          * POST Routes
          */
-        Route::post('add', [PriceBookController::class, 'addStanderdPriceBook'])->name('price.standerd.store');
-        Route::post('edit', [PriceBookController::class, 'editStanderdPriceBook'])->name('price.standerd.update');
+        Route::post('add', [
+            'as' => 'price.standerd.add', 'uses' => 'PriceBookController@addStanderdPriceBook'
+        ]);
+
+        Route::post('edit', [
+            'as' => 'price.standerd.edit', 'uses' => 'PriceBookController@editStanderdPriceBook'  // Not Implemented Yet
+        ]);
+
     });
 
 
@@ -51,20 +98,49 @@ Route::group(['middleware' => ['auth', 'web']], function () {
         /**
          * GET Routes
          */
-        Route::get('add', [PriceBookController::class, 'addCustomPriceBookView'])->name('price.custom.add');
-        Route::get('json/userList', [PriceBookController::class, 'jsonListUsers'])->name('price.custom.list');
-        Route::get('json/customUserList', [PriceBookController::class, 'jsonListUsersCustom'])->name('price.custom.listCustomUser');
-        Route::get('list', [PriceBookController::class, 'listCustomPriceBookView'])->name('price.custom.list');
-        Route::get('json/listPriceBook', [PriceBookController::class, 'jsonListCustomPriceBook'])->name('price.custom.listPriceBook');
-        Route::get('json/listPriceBookDetail/{id}', [PriceBookController::class, 'jsonListCustomPriceBookDetail'])->name('price.custom.listPriceBookDetail');
-        Route::get('check-mrp', [PriceBookController::class, 'checkMrp'])->name('price.custom.check-mrp');
-        Route::get('edit/{id}', [PriceBookController::class, 'editCustomPriceBookView'])->name('price.custom.edit');
+        Route::get('add', [
+            'as' => 'price.custom.add', 'uses' => 'PriceBookController@addCustomPriceBookView'
+        ]);
+
+        Route::get('json/userList', [
+            'as' => 'price.custom.list', 'uses' => 'PriceBookController@jsonListUsers'
+        ]);
+
+        Route::get('json/customUserList', [
+            'as' => 'price.custom.list', 'uses' => 'PriceBookController@jsonListUsersCustom'
+        ]);
+
+        Route::get('list', [
+            'as' => 'price.custom.list', 'uses' => 'PriceBookController@listCustomPriceBookView'
+        ]);
+
+        Route::get('json/listPriceBook', [
+            'as' => 'price.custom.list', 'uses' => 'PriceBookController@jsonListCustomPriceBook'
+        ]);
+
+        Route::get('json/listPriceBookDetail/{id}', [
+            'as' => 'price.custom.list', 'uses' => 'PriceBookController@jsonListCustomPriceBookDetail'
+        ]);
+
+        Route::get('check-mrp', [
+            'as' => 'price.custom.check-mrp', 'uses' => 'PriceBookController@checkMrp'
+        ]);
+
+        Route::get('edit/{id}', [
+            'as' => 'price.custom.edit', 'uses' => 'PriceBookController@editCustomPriceBookView'
+        ]);
 
         /**
          * POST Routes
          */
-        Route::post('add', [PriceBookController::class, 'addCustomPriceBook'])->name('price.custom.store');
-        Route::post('edit', [PriceBookController::class, 'editCustomPriceBook'])->name('price.custom.update');
+        Route::post('add', [
+            'as' => 'price.custom.add', 'uses' => 'PriceBookController@addCustomPriceBook'
+        ]);
+
+        Route::post('edit', [
+            'as' => 'price.custom.edit', 'uses' => 'PriceBookController@editCustomPriceBook'  // Not Implemented Yet
+        ]);
+
     });
 
     Route::group(['prefix' => 'price/mrp', 'namespace' => 'Core\PriceBook\Http\Controllers'], function () {
@@ -72,17 +148,36 @@ Route::group(['middleware' => ['auth', 'web']], function () {
         /**
          * GET Routes
          */
-        Route::get('add', [PriceBookController::class, 'addMrpView'])->name('price.mrp.add');
-        Route::get('json/productList', [PriceBookController::class, 'jsonListMrpProductDetail'])->name('price.mrp.listProduct');
-        Route::get('list', [PriceBookController::class, 'listMrpView'])->name('price.mrp.list');
-        Route::get('excel', [PriceBookController::class, 'getExcel'])->name('price.mrp.excel.add');
-        Route::get('template', [PriceBookController::class, 'getTemplate'])->name('price.mrp.excel.template');
+        Route::get('add', [
+            'as' => 'price.mrp.add', 'uses' => 'PriceBookController@addMrpView'
+        ]);
 
+        Route::get('json/productList', [
+            'as' => 'price.mrp.list', 'uses' => 'PriceBookController@jsonListMrpProductDetail'
+        ]);
+
+        Route::get('list', [
+            'as' => 'price.mrp.list', 'uses' => 'PriceBookController@listMrpView'
+        ]);
+
+        Route::get('excel', [
+            'as' => 'price.mrp.excel.add', 'uses' => 'PriceBookController@getExcel'
+        ]);
+
+        Route::get('template', [
+            'as' => 'price.mrp.excel.add', 'uses' => 'PriceBookController@getTemplate'
+        ]);
         /**
          * POST Routes
          */
-        Route::post('add', [PriceBookController::class, 'addMrpBook'])->name('price.mrp.store');
-        Route::post('excel', [PriceBookController::class, 'addExcel'])->name('price.mrp.excel.store');
+        Route::post('add', [
+            'as' => 'price.mrp.add', 'uses' => 'PriceBookController@addMrpBook'
+        ]);
+
+        Route::post('excel', [
+            'as' => 'price.mrp.excel.add', 'uses' => 'PriceBookController@addExcel'
+        ]);
+
     });
 
 });

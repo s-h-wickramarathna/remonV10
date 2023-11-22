@@ -789,7 +789,7 @@ class PaymentController extends Controller
             'customer_name',
             'total',
             'invoice_due',
-            'IFNULL(DATEDIFF(CURDATE(),created_date),0) as no_of_days',
+            DB::raw('IFNULL(DATEDIFF(CURDATE(),created_date),0) as no_of_days'),
             'id')
             ->whereRaw('total > 0')->where('invoice_due', '>', 0);
 

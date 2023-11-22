@@ -1,28 +1,54 @@
 <?php
-use Application\AlbumSize\Http\Controllers\SizeController;
+/**
+ * PERMISSIONS MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Yasith Samarawickrama <yazith11@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
+ */
 use Illuminate\Support\Facades\Route;
-
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('sizes')->namespace('Application\AlbumSize\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [ControllersSizeController::class, 'addView'])->name('size.add');
-        Route::get('edit/{id}', [SizeController::class, 'editView'])->name('size.edit'); // Not Implemented Yet
-        Route::get('list', [SizeController::class, 'listView'])->name('size.list');
-        Route::get('json/list', [SizeController::class, 'jsonList'])->name('size.list');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'sizes', 'namespace' => 'Application\AlbumSize\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'size.add', 'uses' => 'SizeController@addView'
+      ]);
+      Route::get('edit/{id}', [
+        'as' => 'size.edit', 'uses' => 'SizeController@editView'  // Not Implemented Yet
+      ]);
+      Route::get('list', [
+        'as' => 'size.list', 'uses' => 'SizeController@listView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [SizeController::class, 'add'])->name('size.add');
-        Route::post('edit/{id}', [SizeController::class, 'edit'])->name('size.edit'); // Not Implemented Yet
-        Route::post('status', [SizeController::class, 'status'])->name('size.status');
+        Route::get('json/list', [
+            'as' => 'size.list', 'uses' => 'SizeController@jsonList'
+        ]);
 
-        // Uncomment the following route if needed
-        // Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'size.add', 'uses' => 'SizeController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'size.edit', 'uses' => 'SizeController@edit'  // Not Implemented Yet
+      ]);
+
+      Route::post('status', [
+        'as' => 'size.status', 'uses' => 'SizeController@status'
+      ]);
+
+//      Route::post('delete', [
+//        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+//      ]);
     });
 });

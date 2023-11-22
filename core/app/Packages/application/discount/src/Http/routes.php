@@ -1,59 +1,124 @@
 <?php
-use Application\Discount\Http\Controllers\DiscountController;
-use Illuminate\Support\Facades\Route;
-
 /**
  * PERMISSIONS MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Yasith Samarawickrama <yazith11@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('discount/group')->namespace('Application\Discount\Http\Controllers')->group(function () {
+use Illuminate\Support\Facades\Route;
+/**
+ * USER AUTHENTICATION MIDDLEWARE
+ */
+Route::group(['middleware' => ['auth','web']], function () {
+    Route::group(['prefix' => 'discount/group', 'namespace' => 'Application\Discount\Http\Controllers'], function () {
         /**
          * GET Routes
          */
-        Route::get('add', [DiscountController::class, 'addGroupView'])->name('discountGroup.add');
-        Route::get('json/getProducts', [DiscountController::class, 'getProducts'])->name('discountGroup.json');
-        Route::get('list', [DiscountController::class, 'listViewDiscountGroup'])->name('discountGroup.list');
-        Route::get('json/list', [DiscountController::class, 'jsonListGroupView'])->name('discountGroup.list');
-        Route::get('json/listDetailGroup', [DiscountController::class, 'jsonListGroupDetailView'])->name('discountGroup.listDetailGroup');
-        Route::get('json/getRuleType', [DiscountController::class, 'getRuleType'])->name('discountGroup.json');
+        Route::get('add', [
+            'as' => 'discountGroup.add', 'uses' => 'DiscountController@addGroupView'
+        ]);
 
+        Route::get('json/getProducts', [
+            'as' => 'discountGroup.json', 'uses' => 'DiscountController@getProducts'
+        ]);
+
+        Route::get('list', [
+            'as' => 'discountGroup.list', 'uses' => 'DiscountController@listViewDiscountGroup'
+        ]);
+
+        Route::get('json/list', [
+            'as' => 'discountGroup.list', 'uses' => 'DiscountController@jsonListGroupView'
+        ]);
+
+        Route::get('json/listDetailGroup', [
+            'as' => 'discountGroup.list', 'uses' => 'DiscountController@jsonListGroupDetailView'
+        ]);
+
+        Route::get('json/getRuleType', [
+            'as' => 'discountGroup.json', 'uses' => 'DiscountController@getRuleType'
+        ]);
         /**
          * POST Routes
          */
-        Route::post('add', [DiscountController::class, 'addGroup'])->name('discountGroup.add');
-        Route::post('status', [DiscountController::class, 'statusGroup'])->name('discountGroup.status');
+        Route::post('add', [
+            'as' => 'discountGroup.add', 'uses' => 'DiscountController@addGroup'
+        ]);
+
+        Route::post('status', [
+            'as' => 'discountGroup.status', 'uses' => 'DiscountController@statusGroup'
+        ]);
+
+
+
     });
 
-    Route::prefix('discount/rule')->namespace('Application\Discount\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
+    Route::group(['prefix' => 'discount/rule', 'namespace' => 'Application\Discount\Http\Controllers'], function () {
+        /*
+         * Get Routes
          */
-        Route::get('add', [DiscountController::class, 'addRuleView'])->name('discountRule.add');
-        Route::get('json/listDetailRule', [DiscountController::class, 'jsonListRuleDetailView'])->name('discountRule.listDetailRule');
-        Route::get('list', [DiscountController::class, 'listViewDiscountRule'])->name('discountRule.list');
-        Route::get('json/list', [DiscountController::class, 'jsonListRuleView'])->name('discountRule.list');
+        Route::get('add', [
+            'as' => 'discountRule.add', 'uses' => 'DiscountController@addRuleView'
+        ]);
 
-        /**
-         * POST Routes
+        Route::get('json/listDetailRule', [
+            'as' => 'discountRule.list', 'uses' => 'DiscountController@jsonListRuleDetailView'
+        ]);
+
+        Route::get('list', [
+            'as' => 'discountRule.list', 'uses' => 'DiscountController@listViewDiscountRule'
+        ]);
+
+        Route::get('json/list', [
+            'as' => 'discountRule.list', 'uses' => 'DiscountController@jsonListRuleView'
+        ]);
+        /*
+         * Post Routes
          */
-        Route::post('add', [DiscountController::class, 'addRule'])->name('discountRule.add');
-        Route::post('status', [DiscountController::class, 'statusRule'])->name('discountRule.status');
+
+        Route::post('add', [
+            'as' => 'discountRule.add', 'uses' => 'DiscountController@addRule'
+        ]);
+
+        Route::post('status', [
+            'as' => 'discountRule.status', 'uses' => 'DiscountController@statusRule'
+        ]);
     });
 
-    Route::prefix('discount/outletAssign')->namespace('Application\Discount\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
+    Route::group(['prefix' => 'discount/outletAssign', 'namespace' => 'Application\Discount\Http\Controllers'], function () {
+        /*
+         * Get Routes
          */
-        Route::get('add', [DiscountController::class, 'addGroupOutletView'])->name('discounTotOutlet.add');
-        Route::get('json/getLocation', [DiscountController::class, 'getLocation'])->name('discounTotOutlet.json');
-        Route::get('list', [DiscountController::class, 'listGroupOutletView'])->name('discounTotOutlet.list');
-        Route::get('json/list', [DiscountController::class, 'listGroupOutlet'])->name('discounTotOutlet.list');
-        Route::get('json/listDetailGroupOutlet', [DiscountController::class, 'jsonListOutletGroupDetailView'])->name('discounTotOutlet.listDetailGroupOutlet');
+        Route::get('add', [
+            'as' => 'discounTotOutlet.add', 'uses' => 'DiscountController@addGroupOutletView'
+        ]);
 
-        /**
-         * POST Routes
+        Route::get('json/getLocation', [
+            'as' => 'discounTotOutlet.json', 'uses' => 'DiscountController@getLocation'
+        ]);
+
+        Route::get('list', [
+            'as' => 'discounTotOutlet.list', 'uses' => 'DiscountController@listGroupOutletView'
+        ]);
+
+        Route::get('json/list', [
+            'as' => 'discounTotOutlet.list', 'uses' => 'DiscountController@listGroupOutlet'
+        ]);
+
+        Route::get('json/listDetailGroupOutlet', [
+            'as' => 'discounTotOutlet.list', 'uses' => 'DiscountController@jsonListOutletGroupDetailView'
+        ]);
+        /*
+         * Post Routes
          */
-        Route::post('add', [DiscountController::class, 'addDiscountGroupOutlet'])->name('discounTotOutlet.add');
-        Route::post('status', [DiscountController::class, 'statusGroupOutlet'])->name('discounTotOutlet.status');
+
+        Route::post('add', [
+            'as' => 'discounTotOutlet.add', 'uses' => 'DiscountController@addDiscountGroupOutlet'
+        ]);
+
+        Route::post('status', [
+            'as' => 'discounTotOutlet.status', 'uses' => 'DiscountController@statusGroupOutlet'
+        ]);
     });
+
 });

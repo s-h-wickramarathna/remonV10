@@ -1,27 +1,60 @@
 <?php
-use Application\CustomerManage\Http\Controllers\CustomerController;
-use Application\CustomerManage\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('customer')->namespace('Application\CustomerManage\Http\Controllers')->group(function () {
+Route::group(['middleware' => ['auth','web']], function () {
+    Route::group(['prefix' => 'customer', 'namespace' => 'Application\CustomerManage\Http\Controllers'], function () {
         /**
          * GET Routes
          */
-        Route::get('add', [CustomerController::class, 'addView'])->name('customer.add');
-        Route::get('list', [CustomerController::class, 'listView'])->name('customer.list');
-        Route::get('json/list', [CustomerController::class, 'jsonList'])->name('customer.list');
-        Route::get('edit/{id}', [CustomerController::class, 'editView'])->name('customer.edit');
-        Route::get('report/list', [CustomerController::class, 'reportView'])->name('report.customer.list');
-        Route::get('list/download', [CustomerController::class, 'customerReportDownload'])->name('report.customer.list');
+        Route::get('add', [
+            'as' => 'customer.add', 'uses' => 'CustomerController@addView'
+        ]);
+
+        Route::get('list', [
+            'as' => 'customer.list', 'uses' => 'CustomerController@listView'
+        ]);
+
+        Route::get('json/list', [
+            'as' => 'customer.list', 'uses' => 'CustomerController@jsonList'
+        ]);
+
+        Route::get('edit/{id}', [
+            'as' => 'customer.edit', 'uses' => 'CustomerController@editView'
+        ]);
+
+        Route::get('report/list', [
+            'as' => 'report.customer.list', 'uses' => 'CustomerController@reportView'
+        ]);
+
+        Route::get('list/download', [
+            'as' => 'report.customer.list', 'uses' => 'CustomerController@customerReportDownload'
+        ]);
+
 
         /**
          * POST Routes
          */
-        Route::post('add', [CustomerController::class, 'add'])->name('customer.add');
-        Route::post('delete', [VehicleController::class, 'delete'])->name('vehicle.delete');
-        Route::post('edit/{id}', [CustomerController::class, 'edit'])->name('customer.edit');
-        Route::post('status', [CustomerController::class, 'status'])->name('customer.status');
-        Route::post('credit-status', [CustomerController::class, 'creditLimitStatus'])->name('customer.credit_status');
+        Route::post('add', [
+            'as' => 'customer.add', 'uses' => 'CustomerController@add'
+        ]);
+
+        Route::post('delete', [
+            'as' => 'vehicle.delete', 'uses' => 'VehicleController@delete'
+        ]);
+
+        Route::post('edit/{id}', [
+            'as' => 'customer.edit', 'uses' => 'CustomerController@edit'
+        ]);
+
+        Route::post('status', [
+            'as' => 'customer.status', 'uses' => 'CustomerController@status'
+        ]);
+
+        Route::post('credit-status', [
+            'as' => 'customer.credit_status', 'uses' => 'CustomerController@creditLimitStatus'
+        ]);
+
     });
+
+
 });

@@ -1,62 +1,195 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Application\JobManage\Http\Controllers\JobController;
 
-Route::middleware(['auth', 'web'])->group(function () {
-
-    Route::prefix('job')->namespace('Application\JobManage\Http\Controllers')->group(function () {
+Route::group(['middleware' => ['auth','web']], function () {
+    Route::group(['prefix' => 'job', 'namespace' => 'Application\JobManage\Http\Controllers'], function () {
         /**
          * GET Routes
          */
-        Route::get('index', [JobController::class, 'index'])->name('job.index');
-        Route::get('data/add/{id?}', [JobController::class, 'dataAdd'])->name('job.data.add');
-        Route::get('data/edit/{id?}', [JobController::class, 'dataEdit'])->name('job.data.edit');
-        Route::get('data/search', [JobController::class, 'dataSearch'])->name('job.list');
-        Route::get('new/add', [JobController::class, 'newAddView'])->name('job.add');
-        Route::get('new/getData/{id}', [JobController::class, 'getData'])->name('job.getData');
-        Route::get('qr/list/{id}', [JobController::class, 'qrList'])->name('job.qrList');
-        Route::get('qr/print/{id}', [JobController::class, 'qrPrint'])->name('job.qrPrint');
-        Route::get('new/list', [JobController::class, 'newList'])->name('job.newList');
-        Route::get('report', [JobController::class, 'reportView'])->name('job.list');
-        Route::get('new/edit/{id}', [JobController::class, 'editNewJob'])->name('job.change');
-        Route::get('resize', [JobController::class, 'resize'])->name('user.role.add');
-        Route::get('list', [JobController::class, 'listView'])->name('job.list');
-        Route::get('pending-report', [JobController::class, 'jobReport'])->name('job.list');
-        Route::get('pending-report/print', [JobController::class, 'jobReportPrint'])->name('job.list');
-        Route::get('report/no-job-customers', [JobController::class, 'noJobCustomers'])->name('job.list');
-        Route::get('report/no-job-customers/print', [JobController::class, 'noJobCustomersPrint'])->name('job.list');
-        Route::get('search', [JobController::class, 'search'])->name('job.list');
-        Route::get('processing/{id}', [JobController::class, 'processing'])->name('job.change');
-        Route::get('done/{id}', [JobController::class, 'done'])->name('job.change');
-        Route::get('delivered/{id}', [JobController::class, 'delivered'])->name('job.change');
-        Route::get('confirm/{id}', [JobController::class, 'confirm'])->name('job.confirm');
-        Route::get('add', [JobController::class, 'addView'])->name('job.add');
-        Route::get('getData/{id}', [JobController::class, 'getData'])->name('job.add');
-        Route::get('print/{id}', [JobController::class, 'toPrint'])->name('job.list');
-        Route::get('level/{id}', [JobController::class, 'levelView'])->name('job.level');
-        Route::get('level/getData/{id}', [JobController::class, 'getLevelData'])->name('job.level');
-        Route::get('edit/{id}', [JobController::class, 'editJob'])->name('job.change');
-        Route::get('planing/edit/{qr_id}', [JobController::class, 'editPlaningJob'])->name('job.change');
-        Route::get('edit/getData/{qr_id}', [JobController::class, 'getData'])->name('job.add');
-        Route::get('other/edit/{qr_id}', [JobController::class, 'editOtherJob'])->name('job.change');
-        Route::get('new/search/{id?}', [JobController::class, 'newJobSearch'])->name('job.list');
-        Route::get('qa/edit/{id}', [JobController::class, 'editQAJob'])->name('job.change');
-        Route::get('download', [JobController::class, 'download'])->name('job.list');
+
+        Route::get('index', [
+            'as' => 'job.index', 'uses' => 'JobController@index'
+        ]);
+
+        Route::get('data/add/{id?}', [
+            'as' => 'job.data.add', 'uses' => 'JobController@dataAdd'
+        ]);
+
+        Route::get('data/edit/{id?}', [
+            'as' => 'job.data.edit', 'uses' => 'JobController@dataEdit'
+        ]);
+
+        Route::get('data/search', [
+            'as' => 'job.list', 'uses' => 'JobController@dataSearch'
+        ]);
+
+        Route::get('new/add', [
+            'as' => 'job.add', 'uses' => 'JobController@newAddView'
+        ]);
+
+        Route::get('new/getData/{id}', [
+            'as' => 'job.add', 'uses' => 'JobController@getData'
+        ]);
+
+        Route::get('qr/list/{id}', [
+            'as' => 'job.list', 'uses' => 'JobController@qrList'
+        ]);
+
+        Route::get('qr/print/{id}', [
+            'as' => 'job.print', 'uses' => 'JobController@qrPrint'
+        ]);
+
+        Route::get('new/list', [
+            'as' => 'job.list', 'uses' => 'JobController@newList'
+        ]);
+
+        Route::get('report', [
+            'as' => 'job.list', 'uses' => 'JobController@reportView'
+        ]);
+
+        Route::get('new/edit/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@editNewJob'
+        ]);
+
+        Route::get('resize', [
+            'as' => 'user.role.add', 'uses' => 'JobController@resize'
+        ]);
+
+        Route::get('list', [
+            'as' => 'job.list', 'uses' => 'JobController@listView'
+        ]);
+
+        Route::get('pending-report', [
+            'as' => 'job.list', 'uses' => 'JobController@jobReport'
+        ]);
+
+        Route::get('pending-report/print', [
+            'as' => 'job.list', 'uses' => 'JobController@jobReportPrint'
+        ]);
+
+        Route::get('report/no-job-customers', [
+            'as' => 'job.list', 'uses' => 'JobController@noJobCustomers'
+        ]);
+
+        Route::get('report/no-job-customers/print', [
+            'as' => 'job.list', 'uses' => 'JobController@noJobCustomersPrint'
+        ]);
+
+
+
+        Route::get('search', [
+            'as' => 'job.list', 'uses' => 'JobController@search'
+        ]);
+
+        Route::get('processing/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@processing'
+        ]);
+
+        Route::get('done/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@done'
+        ]);
+
+        Route::get('delivered/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@delivered'
+        ]);
+
+        Route::get('confirm/{id}', [
+            'as' => 'job.confirm', 'uses' => 'JobController@confirm'
+        ]);
+
+        Route::get('add', [
+            'as' => 'job.add', 'uses' => 'JobController@addView'
+        ]);
+
+        Route::get('getData/{id}', [
+            'as' => 'job.add', 'uses' => 'JobController@getData'
+        ]);
+
+        Route::get('print/{id}', [
+            'as' => 'job.list', 'uses' => 'JobController@toPrint'
+        ]);
+
+        Route::get('level/{id}', [
+            'as' => 'job.level', 'uses' => 'JobController@levelView'
+        ]);
+
+        Route::get('level/getData/{id}', [
+            'as' => 'job.level', 'uses' => 'JobController@getLevelData'
+        ]);
+
+        Route::get('edit/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@editJob'
+        ]);
+
+        Route::get('planing/edit/{qr_id}', [
+            'as' => 'job.change', 'uses' => 'JobController@editPlaningJob'
+        ]);
+
+        Route::get('edit/getData/{qr_id}', [
+            'as' => 'job.add', 'uses' => 'JobController@getData'
+        ]);
+
+        Route::get('other/edit/{qr_id}', [
+            'as' => 'job.change', 'uses' => 'JobController@editOtherJob'
+        ]);
+
+        Route::get('new/search/{id?}', [
+            'as' => 'job.list', 'uses' => 'JobController@newJobSearch'
+        ]);
+
+        Route::get('qa/edit/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@editQAJob'
+        ]);
+
+        Route::get('download', [
+            'as' => 'job.list', 'uses' => 'JobController@download'
+        ]);
 
         /*
          * get data of filtered value in data table
          */
-        Route::get('filter', [TargetController::class, 'filter'])->name('marketeer.target.list');
+        Route::get('filter', [
+            'as' => 'marketeer.target.list', 'uses' => 'TargetController@filter'
+        ]);
 
-        Route::post('add', [JobController::class, 'add'])->name('job.add');
-        Route::post('level/{id}', [JobController::class, 'editLevel'])->name('job.level');
-        Route::post('edit/{id}', [JobController::class, 'edit'])->name('job.change');
-        Route::post('data/add/{id?}', [JobController::class, 'addData'])->name('job.data.add');
-        Route::post('data/edit/{id?}', [JobController::class, 'editData'])->name('job.data.edit');
-        Route::post('data/delete', [JobController::class, 'deleteData'])->name('job.data.edit');
-        Route::post('new/add', [JobController::class, 'AddNewJob'])->name('job.add');
-        Route::post('new/edit/{qr_id}', [JobController::class, 'newJobEdit'])->name('job.change');
-        Route::post('planing/edit/{qr_id}', [JobController::class, 'newPlaningEdit'])->name('job.change');
-        Route::post('qa/edit/{qr_id}', [JobController::class, 'newQAEdit'])->name('job.change');
+        Route::post('add', [
+            'as' => 'job.add', 'uses' => 'JobController@add'
+        ]);
+
+        Route::post('level/{id}', [
+            'as' => 'job.level', 'uses' => 'JobController@editLevel'
+        ]);
+
+        Route::post('edit/{id}', [
+            'as' => 'job.change', 'uses' => 'JobController@edit'
+        ]);
+
+        Route::post('data/add/{id?}', [
+            'as' => 'job.data.add', 'uses' => 'JobController@addData'
+        ]);
+
+        Route::post('data/edit/{id?}', [
+            'as' => 'job.data.edit', 'uses' => 'JobController@editData'
+        ]);
+        Route::post('data/delete', [
+            'as' => 'job.data.edit', 'uses' => 'JobController@deleteData'
+        ]);
+
+        Route::post('new/add', [
+            'as' => 'job.add', 'uses' => 'JobController@AddNewJob'
+        ]);
+
+        Route::post('new/edit/{qr_id}', [
+            'as' => 'job.change', 'uses' => 'JobController@newJobEdit'
+        ]);
+
+        Route::post('planing/edit/{qr_id}', [
+            'as' => 'job.change', 'uses' => 'JobController@newPlaningEdit'
+        ]);
+
+        Route::post('qa/edit/{qr_id}', [
+            'as' => 'job.change', 'uses' => 'JobController@newQAEdit'
+        ]);
+
     });
 });

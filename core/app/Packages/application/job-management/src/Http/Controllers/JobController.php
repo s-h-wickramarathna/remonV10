@@ -44,17 +44,19 @@ use Core\MenuManage\Models\Menu;
 use Illuminate\Http\Request;
 use Application\EmployeeManage\Models\Employee;
 use Core\Permissions\Models\Permission;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Excel;
 use Milon\Barcode\DNS1D;
 use Illuminate\Support\Facades\Response;
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+
 use App\Classes\Common;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Exception;
+use Illuminate\Support\Facades\DB;
+
 use function foo\func;
 
 
@@ -133,7 +135,7 @@ class JobController extends Controller
                     'job_id' => $id,
                     'cover_id' => $type
                 ]);
-            } 
+            }
         }
 
         if ($request->radio_box) {
@@ -202,10 +204,13 @@ class JobController extends Controller
         $log_user = Sentinel::getUser();
         $customerList = Customer::all();
         if ($log_user->username != 'super.admin') {
+            // dd('first_if');
             if ($log_user->hasAnyAccess(['job.add'])) {
-                if (trim($log_user->roles[0]->name) == 'marketer') {
+                // dd('permission');
+                if ($log_user->roles[0]->name == 'marketer') {
+                    dd('second_if');
                     $marketeerList = Employee::where('id', $log_user->employee_id)->get();
-                    $invoiceList = JobNew::select('job_new.*','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type ','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section ')
+                    $invoiceList = JobNew::select('job_new.*', DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type '), DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section '))
                         ->with('customer.marketeer', 'employee', 'invoice')
                         ->whereRaw('(customer_id IN (SELECT id FROM remon_customer WHERE remon_customer.marketeer_id = ' . $log_user->employee_id . ') OR  create_by = ' . $log_user->employee_id . ')')
                         ->whereNull('ended_at')
@@ -213,20 +218,44 @@ class JobController extends Controller
                         ->orderBy('updated_at', 'DESC')
                         ->paginate(12);
                 } else {
-
+                    //   dd('third_if');
                     $marketeerList = Employee::where('employee_type_id', 2)->get();
-                    $invoiceList = JobNew::select('job_new.*', '(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type ','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section ')
+                    // dd($marketeerList);
+
+                    // $invoiceList = JobNew::select('job_new.*', 
+                    // DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status limit) as confirm_type '), 
+                    // DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section '))
+                    //     ->with(['customer.marketeer', 'employee', 'invoice'])
+                    //     ->groupBy('job_new.id')
+                    //     ->orderBy('updated_at', 'DESC')
+                    //     ->whereNull('ended_at')
+                    //     ->paginate(12);
+
+                        $invoiceList = JobNew::select('job_new.*')
+                        ->addSelect(DB::raw('jt1.type AS confirm_type'))
+                        ->addSelect(DB::raw('jt2.type AS section'))
                         ->with(['customer.marketeer', 'employee', 'invoice'])
+                        ->leftJoin('job_level_config AS jt1', function ($join) {
+                            $join->on('job_new.id', '=', 'jt1.job_id')
+                                ->where('jt1.job_link', '=', DB::raw('job_new.status'));
+                        })
+                        ->leftJoin('job_level_config AS jt2', function ($join) {
+                            $join->on('job_new.id', '=', 'jt2.job_id')
+                                ->where('jt2.job_link', '=', DB::raw('job_new.status + 1'));
+                        })
                         ->groupBy('job_new.id')
                         ->orderBy('updated_at', 'DESC')
                         ->whereNull('ended_at')
                         ->paginate(12);
+                    
+                    // dd($invoiceList);
                 }
             } elseif (trim($log_user->roles[0]->name) == 'customer') {
+                dd('forth_if');
                 $customerList = Customer::where('user_id', $log_user->id)->get();
                 $marketeerList = [];
                 $customer = Customer::where('user_id', $log_user->id)->first();
-                $invoiceList = JobNew::selectRaw('job_new.*','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type ', '(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section ')
+                $invoiceList = JobNew::selectRaw('job_new.*', DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type '), '(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section ')
                     ->with('customer.marketeer', 'employee', 'invoice')
                     //->whereRaw('(select jc.type from job_level_config as jc where jc.job_id = job.id and jc.job_link =  (IFNULL(job_level_config.job_link,0) + 1)) = "' . $marketeerList[0]->type->type . '"')
                     //->where('job_level_config.job_link','=','job.status')
@@ -236,15 +265,36 @@ class JobController extends Controller
                     ->orderBy('job_new.updated_at', 'DESC')
                     ->paginate(12);
             } else {
+                // dd('sixth_if');
                 $marketeerList = Employee::with('type')->where('id', $log_user->employee_id)->get();
+                // dd($marketeerList);
 
-                $invoiceList = JobNew::select('job_new.*','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type ','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section ')
-                    ->with(['customer.marketeer', 'employee', 'invoice'])
-                    ->groupBy('job_new.id')
-                    ->orderBy('updated_at', 'DESC')
-                    ->whereNull('ended_at')
-                    ->paginate(12);
+                // unused query :-
+                // $invoiceList = JobNew::select('job_new.*', DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status) as confirm_type '), DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1)) as section '))
+                //     ->with(['customer.marketeer', 'employee', 'invoice'])
+                //     ->groupBy('job_new.id')
+                //     ->orderBy('updated_at', 'DESC')
+                //     ->whereNull('ended_at')
+                //     ->paginate(12);
+
+                    $invoiceList = JobNew::select('job_new.*')
+                        ->addSelect(DB::raw('jt1.type AS confirm_type'))
+                        ->addSelect(DB::raw('jt2.type AS section'))
+                        ->with(['customer.marketeer', 'employee', 'invoice'])
+                        ->leftJoin('job_level_config AS jt1', function ($join) {
+                            $join->on('job_new.id', '=', 'jt1.job_id')
+                                ->where('jt1.job_link', '=', DB::raw('job_new.status'));
+                        })
+                        ->leftJoin('job_level_config AS jt2', function ($join) {
+                            $join->on('job_new.id', '=', 'jt2.job_id')
+                                ->where('jt2.job_link', '=', DB::raw('job_new.status + 1'));
+                        })
+                        ->groupBy('job_new.id')
+                        ->orderBy('updated_at', 'DESC')
+                        ->whereNull('ended_at')
+                        ->paginate(12);
             }
+            // dd('seventh_if');
         } else {
             $marketeerList = Employee::where('employee_type_id', 2)->get();
             $invoiceList = JobNew::with('customer.marketeer', 'employee', 'invoice', 'confirmation')->orderBy('updated_at', 'DESC')->paginate(12);
@@ -254,11 +304,14 @@ class JobController extends Controller
 
         if (sizeof($log_user->roles) > 0) {
             if ($log_user->roles[0]->slug == 'laminating' || $log_user->roles[0]->slug == 'binding') {
-                
+
+
                 return view('jobManage::list')->with(['orders' => $invoiceList, 'invoice_no' => '', 'marketeerList' => $marketeerList, 'marketeer' => '', 'from' => '', 'to' => '', 'status' => 0, 'customerList' => $customerList, 'customer' => '']);
             }
         }
         return view('jobManage::new-list')->with(['orders' => $invoiceList, 'invoice_no' => '', 'marketeerList' => $marketeerList, 'marketeer' => '', 'from' => '', 'to' => '', 'status' => 0, 'customerList' => $customerList, 'customer' => '']);
+        // return view('jobManage::new-list')->with(['orders' => '$invoiceList', 'invoice_no' => '', 'marketeerList' => '$marketeerList', 'marketeer' => '', 'from' => '', 'to' => '', 'status' => 0, 'customerList' => ['name'], 'customer' => '']);
+        
     }
 
     public function jobReport(Request $request)
@@ -267,7 +320,7 @@ class JobController extends Controller
         $customerList = Customer::all();
         if ($log_user->username != 'super.admin') {
             $marketeerList = Employee::where('employee_type_id', 2)->get();
-            $invoiceList = JobNew::select('job_new.*','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status LIMIT 1) as confirm_type ','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1) LIMIT 1) as section ')
+            $invoiceList = JobNew::select('job_new.*', DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status LIMIT 1) as confirm_type '), DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1) LIMIT 1) as section '))
                 ->with('customer.marketeer', 'employee', 'invoice', 'confirmation');
             if ($request->get('from')) {
                 $invoiceList = $invoiceList->whereRaw('DATE(due_date) = "' . $request->get('from') . '"');
@@ -429,8 +482,8 @@ class JobController extends Controller
             return response()->view("errors.404");
         }
 
-        $pdf = new PdfTemplate();
-        $pdf->SetMargins(28.35 / $pdf->k, 10);
+        $pdf = new PdfTemplate('P', 'mm', 'A4');
+        $pdf->SetMargins(28.35, 10);
         $pdf->SetFont('helvetica', '', 9);
         $pdf->SetAutoPageBreak(TRUE, 20);
         $pdf->AddPage();
@@ -444,7 +497,7 @@ class JobController extends Controller
     {
 
 
-        $orders = JobNew::select('job_new.*','(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status LIMIT 1) as confirm_type ', '(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1) LIMIT 1) as section ')
+        $orders = JobNew::select('job_new.*', DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = job_new.status LIMIT 1) as confirm_type '), DB::raw('(SELECT type FROM `job_level_config` WHERE job_id = job_new.id AND job_link = (job_new.status + 1) LIMIT 1) as section '))
             ->with('customer.marketeer', 'employee', 'invoice', 'confirmation');
 
         if (strlen($request->get('invoice_no')) > 0) {
@@ -497,8 +550,8 @@ class JobController extends Controller
                 return response()->view("errors.404");
             }
 
-            $pdf = new PdfTemplate();
-            $pdf->SetMargins(28.35 / $pdf->k, 10);
+            $pdf = new PdfTemplate('P', 'mm', 'A4');
+            $pdf->SetMargins(28.35, 10);
             $pdf->SetFont('helvetica', '', 9);
             $pdf->SetAutoPageBreak(TRUE, 20);
             $pdf->AddPage();
@@ -741,7 +794,7 @@ class JobController extends Controller
 
         $customer = Customer::with('marketeer')->find($id);
 
-        /* $marketeer_outstanding = DB::select(DB::raw("SELECT SUM(tt.invoice_due) as outstanding,COUNT(tt.invoice_due) FROM (SELECT
+        /* $marketeer_outstanding = DB::select("SELECT SUM(tt.invoice_due) as outstanding,COUNT(tt.invoice_due) FROM (SELECT
                                  (
                                      IFNULL(
                                          (
@@ -812,7 +865,7 @@ class JobController extends Controller
                                      recipt_detail.id IS NULL
                                      OR invoice_due > 0
                                  )
-                             AND total > 0)as tt"));*/
+                             AND total > 0)as tt");*/
 
 
         $credit_limit = $customer->marketeer->credit_limit; // - $marketeer_outstanding[0]->outstanding;
@@ -874,7 +927,7 @@ class JobController extends Controller
 
         $levels = $request->level_order;
 
-        DB::select(DB::raw('UPDATE `job_level_config` SET job_link = 0 where job_id = ' . $request->job_id));
+        DB::select('UPDATE `job_level_config` SET job_link = 0 where job_id = ' . $request->job_id);
         $index = 1;
         if (sizeof(explode(';', $levels)) == 1) {
             $data = array(
@@ -1007,7 +1060,7 @@ class JobController extends Controller
 
         $id = $job->id;
 
-        DB::select(DB::raw('DELETE FROM job_data WHERE job_new_id =' . $id));
+        DB::select('DELETE FROM job_data WHERE job_new_id =' . $id);
         // DB::select(DB::raw('DELETE FROM job_album WHERE job_id ='.$id));
 
         $size = $request->radio_type[0];
@@ -1336,9 +1389,16 @@ class JobController extends Controller
 
     function AddNewJob(Request $request)
     {
+
+        //return $request->all();
+
+        $last_job = JobNew::orderBy('id', 'DESC')->limit(1)->get();
+        $job_no = sizeof($last_job) > 0 && $last_job[0]->job_no ? $this->generateNo($last_job[0]->job_no) : $this->generateNo(0);
+
         // return $request->all();
         $is_exist = JobNew::where('job_no', $request->get('job_no'))->get();
         if (sizeof($is_exist) > 0 || !$request->get('job_no')) {
+
             return redirect()->back()->withInput()->with([
                 'error' => true,
                 'error.message' => 'Job No already exist..',
@@ -1360,7 +1420,7 @@ class JobController extends Controller
         $job = JobNew::create([
             'customer_id' => $request->get('customer_name'),
             'couple_name' => $request->get('couple_name'),
-            'job_no' => $request->get('job_no'),
+            'job_no' => $job_no,
             'remark' => nl2br($request->get('remark')),
             'due_date' => $request->get('due_date'),
             'create_by' => $create_by->employee_id,
@@ -1439,81 +1499,71 @@ class JobController extends Controller
             $file_1 = $request->file('attachment_1');
             if (is_file($file_1)) {
                 $extension_1 = $file_1->getClientOriginalExtension();
-                $name = $job->job_no .'_'.uniqid().'.' . $extension_1;
+                $name = $job->job_no . '.' . $extension_1;
                 // $thumbnailImage_1 = Image::make($file_1);
                 $originalImage_1 = Image::make($file_1);
                 $albumPath = 'storage/images/job/album';
                 // $thumbnailImage_1->resize(775, 645);
                 // $thumbnailImage_1->save($albumPath . $name);
-                // $originalImage_1->save($albumPath . 'original/' . $name);
+                $originalImage_1->save($albumPath . 'original/' . $name);
                 $job->attachment_1 = $albumPath . $name;
                 // $job->original_img = $albumPath . 'original/' . $name;
-                $file_1->move('storage/images/job','album'.$name);
-               
             }
 
             $file_2 = $request->file('attachment_2');
             if (is_file($file_2)) {
                 $extension_2 = $file_2->getClientOriginalExtension();
-                $name = $job->job_no .'_'.uniqid().'.' . $extension_2;
+                $name = $job->job_no . '.' . $extension_2;
                 // $thumbnailImage_2 = Image::make($file_2);
                 $originalImage_2 = Image::make($file_2);
                 $albumPath = 'storage/images/job/album';
                 // $thumbnailImage_2->resize(775, 645);
                 // $thumbnailImage_2->save($albumPath . $name);
-                // $originalImage_2->save($albumPath . 'original/' . $name);
+                $originalImage_2->save($albumPath . 'original/' . $name);
                 $job->attachment_2 = $albumPath . $name;
                 // $job->original_img = $albumPath . 'original/' . $name;
-                $file_2->move('storage/images/job','album'.$name);
-               
             }
 
             $file_3 = $request->file('attachment_3');
             if (is_file($file_3)) {
                 $extension_3 = $file_3->getClientOriginalExtension();
-                $name = $job->job_no .'_'.uniqid().'.' . $extension_3;
+                $name = $job->job_no . '.' . $extension_3;
                 // $thumbnailImage_3 = Image::make($file_3);
                 $originalImage_3 = Image::make($file_3);
                 $albumPath = 'storage/images/job/album';
                 // $thumbnailImage_3->resize(775, 645);
                 // $thumbnailImage_3->save($albumPath . $name);
-                // $originalImage_3->save($albumPath . 'original/' . $name);
+                $originalImage_3->save($albumPath . 'original/' . $name);
                 $job->attachment_3 = $albumPath . $name;
                 // $job->original_img = $albumPath . 'original/' . $name;
-                $file_2->move('storage/images/job','album'.$name);
-               
             }
 
             $file_4 = $request->file('attachment_4');
             if (is_file($file_4)) {
                 $extension_4 = $file_4->getClientOriginalExtension();
-                $name = $job->job_no .'_'.uniqid().'.' . $extension_4;
+                $name = $job->job_no . '.' . $extension_4;
                 // $thumbnailImage_4 = Image::make($file_4);
                 $originalImage_4 = Image::make($file_4);
                 $albumPath = 'storage/images/job/album';
                 // $thumbnailImage_4->resize(775, 645);
                 // $thumbnailImage_4->save($albumPath . $name);
-                // $originalImage_4->save($albumPath . 'original/' . $name);
+                $originalImage_4->save($albumPath . 'original/' . $name);
                 $job->attachment_4 = $albumPath . $name;
                 // $job->original_img = $albumPath . 'original/' . $name;
-                $file_4->move('storage/images/job','album'.$name);
-               
             }
 
             $file_5 = $request->file('attachment_5');
             if (is_file($file_5)) {
                 $extension_5 = $file_5->getClientOriginalExtension();
-                $name = $job->job_no .'_'.uniqid().'.' . $extension_5;
+                $name = $job->job_no . '.' . $extension_5;
                 // $thumbnailImage_5 = Image::make($file_5);
                 $originalImage_5 = Image::make($file_5);
                 $albumPath = 'storage/images/job/album';
                 // $thumbnailImage_5->resize(775, 645);
                 // $thumbnailImage_5->save($albumPath . $name);
-                // $originalImage_5->save($albumPath . 'original/' . $name);
+                $originalImage_5->save($albumPath . 'original/' . $name);
                 $job->attachment_5 = $albumPath . $name;
                 // $job->original_img = $albumPath . 'original/' . $name;
-                $file_5->move('storage/images/job','album'.$name);
-            
             }
             $job->save();
 
@@ -1856,7 +1906,7 @@ class JobController extends Controller
 
         $marketeerList = Employee::where('employee_type_id', 2)->get();
 
-        $customers = Customer::select('remon_customer.*','(SELECT created_at FROM job_new WHERE customer_id = remon_customer.id ORDER BY id DESC LIMIT 1) as last_job')->with('marketeer');
+        $customers = Customer::select('remon_customer.*', DB::raw('(SELECT created_at FROM job_new WHERE customer_id = remon_customer.id ORDER BY id DESC LIMIT 1) as last_job'))->with('marketeer');
 
         $from = date('Y-m-d', strtotime('-30 days'));
         $to = date('Y-m-d');
@@ -1882,14 +1932,14 @@ class JobController extends Controller
         $customers = $customers->orderBy('last_job', 'DESC')
             ->paginate(12);
 
-        return view('jobManage::no-job-customer-report', ['orders' => $customers->appends($request->except('page'))])->with(['orders' => $customers, 'marketeerList' => $marketeerList, 'invoice_no' => $request->get('invoice_no'), 'marketeer' => $request->get('marketeer'), 'from' => $from, 'to' => $to, 'status' => $request->get('status'), 'customerList' => $customerList, 'customer' => $request->get('customer')]);
+        return view('jobManage::no-job-customer-report', ['orders' => $customers->appends(Input::except('page'))])->with(['orders' => $customers, 'marketeerList' => $marketeerList, 'invoice_no' => $request->get('invoice_no'), 'marketeer' => $request->get('marketeer'), 'from' => $from, 'to' => $to, 'status' => $request->get('status'), 'customerList' => $customerList, 'customer' => $request->get('customer')]);
     }
 
     public function noJobCustomersPrint(Request $request)
     {
 
 
-        $customers = Customer::select('remon_customer.*','(SELECT created_at FROM job_new WHERE customer_id = remon_customer.id ORDER BY id DESC LIMIT 1) as last_job')->with('marketeer');
+        $customers = Customer::select('remon_customer.*', DB::raw('(SELECT created_at FROM job_new WHERE customer_id = remon_customer.id ORDER BY id DESC LIMIT 1) as last_job'))->with('marketeer');
 
         $from = date('Y-m-d', strtotime('-30 days'));
         $to = date('Y-m-d');

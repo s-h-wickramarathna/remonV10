@@ -1,28 +1,51 @@
 <?php
-use Application\LaminateType\Http\Controllers\LaminateController;
-use Illuminate\Support\Facades\Route;
+/**
 
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('laminateType')->namespace('Application\LaminateType\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [LaminateController::class, 'addView'])->name('laminate.add');
-        Route::get('edit/{id}', [LaminateController::class, 'editView'])->name('laminate.edit'); // Not Implemented Yet
-        Route::get('list', [LaminateController::class, 'listView'])->name('laminate.list');
-        Route::get('json/list', [LaminateController::class, 'jsonList'])->name('laminate.list');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'laminateType', 'namespace' => 'Application\LaminateType\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'laminate.add', 'uses' => 'LaminateController@addView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [LaminateController::class, 'add'])->name('laminate.add');
-        Route::post('edit/{id}', [LaminateController::class, 'edit'])->name('laminate.edit');
-        Route::post('status', [LaminateController::class, 'status'])->name('laminate.status');
+      Route::get('edit/{id}', [
+        'as' => 'laminate.edit', 'uses' => 'LaminateController@editView'  // Not Implemented Yet
+      ]);
+      Route::get('list', [
+        'as' => 'laminate.list', 'uses' => 'LaminateController@listView'
+      ]);
 
-        // Uncomment the following route if needed
-        // Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+        Route::get('json/list', [
+            'as' => 'laminate.list', 'uses' => 'LaminateController@jsonList'
+        ]);
+
+
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'laminate.add', 'uses' => 'LaminateController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'laminate.edit', 'uses' => 'LaminateController@edit'
+      ]);
+
+      Route::post('status', [
+        'as' => 'laminate.status', 'uses' => 'LaminateController@status'
+      ]);
+
+//      Route::post('delete', [
+//        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+//      ]);
     });
 });

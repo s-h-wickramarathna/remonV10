@@ -1,27 +1,50 @@
 <?php
-
+/**
+ * MENU MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Yasith Samarawickrama <yazith11@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-use Core\UserRoles\Http\Controllers\UserRoleController;
-use Illuminate\Support\Facades\Route;
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'user/role', 'namespace' => 'Core\UserRoles\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'user.role.add', 'uses' => 'UserRoleController@addView'
+      ]);
 
-Route::group(['middleware' => ['auth', 'web']], function () {
-    Route::group(['prefix' => 'user/role', 'namespace' => 'Core\UserRoles\Http\Controllers'], function () {
+      Route::get('edit/{id}', [
+        'as' => 'user.role.edit', 'uses' => 'UserRoleController@editView'
+      ]);
 
-        /**
-         * GET Routes
-         */
-        Route::get('add', [UserRoleController::class, 'addView'])->name('user.role.add');
-        Route::get('edit/{id}', [UserRoleController::class, 'editView'])->name('user.role.edit');
-        Route::get('list', [UserRoleController::class, 'listView'])->name('user.role.list');
-        Route::get('json/list', [UserRoleController::class, 'jsonList'])->name('user.role.jsonList');
+      Route::get('list', [
+        'as' => 'user.role.list', 'uses' => 'UserRoleController@listView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [UserRoleController::class, 'add'])->name('user.role.store');
-        Route::post('edit/{id}', [UserRoleController::class, 'edit'])->name('user.role.update');
-        Route::post('delete', [UserRoleController::class, 'delete'])->name('user.role.delete');
+      Route::get('json/list', [
+        'as' => 'user.role.list', 'uses' => 'UserRoleController@jsonList'
+      ]);
+
+      /**
+       * POST Routes
+       */
+      Route::post('add', [
+        'as' => 'user.role.add', 'uses' => 'UserRoleController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'user.role.edit', 'uses' => 'UserRoleController@edit'
+      ]);
+
+      Route::post('delete', [
+        'as' => 'user.role.delete', 'uses' => 'UserRoleController@delete'
+      ]);
     });
 });

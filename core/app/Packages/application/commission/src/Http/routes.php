@@ -1,31 +1,57 @@
 <?php
-use Application\CommissionManage\Http\Controllers\CommissionController;
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('commission')->namespace('Application\CommissionManage\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [CommissionController::class, 'addView'])->name('commission.add');
-        Route::get('edit/{id}', [CommissionController::class, 'editView'])->name('commission.edit'); // Not Implemented Yet
-        Route::get('list', [CommissionController::class, 'listView'])->name('commission.list');
-        Route::get('json/list', [CommissionController::class, 'jsonList'])->name('product.list');
-        Route::get('json/listcode', [CommissionController::class, 'listcode'])->name('product.add');
-        Route::get('json/listproductcat', [CommissionController::class, 'listproductcat'])->name('product.add');
-        Route::get('exceltolist', [CommissionController::class, 'exceltolist'])->name('product.add');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'commission', 'namespace' => 'Application\CommissionManage\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'commission.add', 'uses' => 'CommissionController@addView'
+      ]);
+      Route::get('edit/{id}', [
+        'as' => 'commission.edit', 'uses' => 'CommissionController@editView'  // Not Implemented Yet
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [CommissionController::class, 'add'])->name('commission.add');
-        Route::post('edit/{id}', [CommissionController::class, 'edit'])->name('product.edit'); // Not Implemented Yet
-        Route::post('status', [CommissionController::class, 'status'])->name('product.status');
+      Route::get('list', [
+        'as' => 'commission.list', 'uses' => 'CommissionController@listView'
+      ]);
 
-        // Uncomment the following route if needed
-        // Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+      Route::get('json/list', [
+        'as' => 'product.list', 'uses' => 'CommissionController@jsonList'
+      ]);
+
+      Route::get('json/listcode', [
+          'as' => 'product.add', 'uses' => 'CommissionController@listcode'
+      ]);
+      Route::get('json/listproductcat', [
+          'as' => 'product.add', 'uses' => 'CommissionController@listproductcat'
+      ]);
+        Route::get('exceltolist', [
+            'as' => 'product.add', 'uses' => 'CommissionController@exceltolist'
+        ]);
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'commission.add', 'uses' => 'CommissionController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'product.edit', 'uses' => 'CommissionController@edit'  // Not Implemented Yet
+      ]);
+
+      Route::post('status', [
+        'as' => 'product.status', 'uses' => 'CommissionController@status'
+      ]);
+
+//      Route::post('delete', [
+//        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+//      ]);
     });
 });

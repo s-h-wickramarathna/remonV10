@@ -1,26 +1,51 @@
 <?php
-use Application\PaperType\Http\Controllers\PaperTypeController;
-use Illuminate\Support\Facades\Route;
+/**
 
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('paperType')->namespace('Application\PaperType\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [PaperTypeController::class, 'addView'])->name('paperType.add');
-        Route::get('edit/{id}', [PaperTypeController::class, 'editView'])->name('paperType.edit'); // Not Implemented Yet
-        Route::get('list', [PaperTypeController::class, 'listView'])->name('paperType.list');
-        Route::get('json/list', [PaperTypeController::class, 'jsonList'])->name('paperType.list');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'paperType', 'namespace' => 'Application\PaperType\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'paperType.add', 'uses' => 'PaperTypeController@addView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [PaperTypeController::class, 'add'])->name('paperType.add');
-        Route::post('edit/{id}', [PaperTypeController::class, 'edit'])->name('paperType.edit'); // Not Implemented Yet
-        Route::post('status', [PaperTypeController::class, 'status'])->name('paperType.status');
-        Route::post('delete', [PaperTypeController::class, 'delete'])->name('paperType.delete');
+      Route::get('edit/{id}', [
+        'as' => 'paperType.edit', 'uses' => 'PaperTypeController@editView'  // Not Implemented Yet
+      ]);
+      Route::get('list', [
+        'as' => 'paperType.list', 'uses' => 'PaperTypeController@listView'
+      ]);
+
+        Route::get('json/list', [
+            'as' => 'paperType.list', 'uses' => 'PaperTypeController@jsonList'
+        ]);
+
+
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'paperType.add', 'uses' => 'PaperTypeController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'paperType.edit', 'uses' => 'PaperTypeController@edit'  // Not Implemented Yet
+      ]);
+
+      Route::post('status', [
+        'as' => 'paperType.status', 'uses' => 'PaperTypeController@status'
+      ]);
+
+      Route::post('delete', [
+        'as' => 'paperType.delete', 'uses' => 'PermissionController@delete'
+      ]);
     });
 });

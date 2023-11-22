@@ -1,28 +1,48 @@
 <?php
-use Application\AlbumCover\Http\Controllers\CoverController;
 use Illuminate\Support\Facades\Route;
-
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('albumCover')->namespace('Application\AlbumCover\Http\Controllers')->group(function () {
-        /**
-         * GET Routes
-         */
-        Route::get('add', [CoverController::class, 'addView'])->name('cover.add');
-        Route::get('edit/{id}', [CoverController::class, 'editView'])->name('cover.edit'); // Not Implemented Yet
-        Route::get('list', [CoverController::class, 'listView'])->name('cover.list');
-        Route::get('json/list', [CoverController::class, 'jsonList'])->name('cover.list');
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'albumCover', 'namespace' => 'Application\AlbumCover\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'cover.add', 'uses' => 'CoverController@addView'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('add', [CoverController::class, 'add'])->name('cover.add');
-        Route::post('edit/{id}', [CoverController::class, 'edit'])->name('cover.edit');
-        Route::post('status', [CoverController::class, 'status'])->name('cover.status');
+      Route::get('edit/{id}', [
+        'as' => 'cover.edit', 'uses' => 'CoverController@editView'  // Not Implemented Yet
+      ]);
+      Route::get('list', [
+        'as' => 'cover.list', 'uses' => 'CoverController@listView'
+      ]);
 
-        // Uncomment the following route if needed
-        // Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+        Route::get('json/list', [
+            'as' => 'cover.list', 'uses' => 'CoverController@jsonList'
+        ]);
+
+
+
+      /**
+       * POST Routes
+       */
+        Route::post('add', [
+        'as' => 'cover.add', 'uses' => 'CoverController@add'
+      ]);
+
+      Route::post('edit/{id}', [
+        'as' => 'cover.edit', 'uses' => 'CoverController@edit'
+      ]);
+
+      Route::post('status', [
+        'as' => 'cover.status', 'uses' => 'CoverController@status'
+      ]);
+
+//      Route::post('delete', [
+//        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+//      ]);
     });
 });

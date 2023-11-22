@@ -1,25 +1,50 @@
 <?php
-
+/**
+ * PERMISSIONS MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Yasith Samarawickrama <yazith11@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
+ */
+use Illuminate\Support\Facades\Route;
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
-use Core\Permissions\Http\Controllers\PermissionController;
-use Illuminate\Support\Facades\Route;
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'permission', 'namespace' => 'Core\Permissions\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+//      Route::get('edit/{id}', [
+//        'as' => 'menu.edit', 'uses' => 'MenuController@editView'  // Not Implemented Yet
+//      ]);
 
-Route::group(['middleware' => ['auth', 'web']], function () {
-    Route::group(['prefix' => 'permission', 'namespace' => 'Core\Permissions\Http\Controllers'], function () {
+      Route::get('list', [
+        'as' => 'permission.list', 'uses' => 'PermissionController@listView'
+      ]);
 
-        /**
-         * GET Routes
-         */
-        Route::get('list', [PermissionController::class, 'listView'])->name('permission.list');
-        Route::get('json/list', [PermissionController::class, 'jsonList'])->name('permission.jsonList');
-        Route::get('api/list', [PermissionController::class, 'apiList'])->name('permission.apiList');
+      Route::get('json/list', [
+        'as' => 'permission.list', 'uses' => 'PermissionController@jsonList'
+      ]);
 
-        /**
-         * POST Routes
-         */
-        Route::post('status', [PermissionController::class, 'status'])->name('permission.status');
-        Route::post('delete', [PermissionController::class, 'delete'])->name('permission.delete');
+      Route::get('api/list', [
+        'as' => 'permission.list', 'uses' => 'PermissionController@apiList'
+      ]);
+
+      /**
+       * POST Routes
+       */
+//      Route::post('edit/{id}', [
+//        'as' => 'menu.edit', 'uses' => 'MenuController@edit'  // Not Implemented Yet
+//      ]);
+
+      Route::post('status', [
+        'as' => 'permission.status', 'uses' => 'PermissionController@status'
+      ]);
+
+      Route::post('delete', [
+        'as' => 'permission.delete', 'uses' => 'PermissionController@delete'
+      ]);
     });
 });

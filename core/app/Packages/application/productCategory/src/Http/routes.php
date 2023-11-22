@@ -1,24 +1,52 @@
 <?php
+/**
+ * PERMISSIONS MANAGEMENT ROUTES
+ *
+ * @version 1.0.0
+ * @author Yasith Samarawickrama <yazith11@gmail.com>
+ * @copyright 2015 Yasith Samarawickrama
+ */
 
-use Application\ProductCategory\Http\Controllers\ProductCategoryController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth', 'web']], function () {
-    Route::group(['prefix' => 'productCategory', 'namespace' => 'Application\ProductCategory\Http\Controllers'], function () {
+/**
+ * USER AUTHENTICATION MIDDLEWARE
+ */
+Route::group(['middleware' => ['auth','web']], function()
+{
+    Route::group(['prefix' => 'productCategory', 'namespace' => 'Application\ProductCategory\Http\Controllers'], function(){
+      /**
+       * GET Routes
+       */
+      Route::get('add', [
+        'as' => 'ProductCategory.add', 'uses' => 'ProductCategoryController@addView'
+      ]);
+      Route::get('edit/{id}', [
+        'as' => 'ProductCategory.edit', 'uses' => 'ProductCategoryController@editView'  // Not Implemented Yet
+      ]);
 
-        /**
-         * GET Routes
-         */
-        Route::get('add', [ProductCategoryController::class, 'addView'])->name('productCategory.add');
-        Route::get('list', [ProductCategoryController::class, 'listView'])->name('productCategory.list');
-        Route::get('json/list', [ProductCategoryController::class, 'jsonList'])->name('productCategory.jsonList');
-        Route::get('edit/{id}', [ProductCategoryController::class, 'editView'])->name('productCategory.edit');
-        
-        /**
-         * POST Routes
-         */
-        Route::post('add', [ProductCategoryController::class, 'add'])->name('productCategory.store');
-        Route::post('status', [ProductCategoryController::class, 'status'])->name('productCategory.status');
-        Route::post('edit/{id}', [ProductCategoryController::class, 'edit'])->name('productCategory.update');
+       Route::get('list', [
+        'as' => 'ProductCategory.list', 'uses' => 'ProductCategoryController@listView'
+      ]);
+
+      Route::get('json/list', [
+        'as' => 'ProductCategory.list', 'uses' => 'ProductCategoryController@jsonList'
+      ]);
+
+      
+
+      /**
+       * POST Routes
+       */
+       Route::post('add', [
+        'as' => 'ProductCategory.add', 'uses' => 'ProductCategoryController@add'
+      ]);
+         Route::post('status', [
+        'as' => 'ProductCategory.status', 'uses' => 'ProductCategoryController@status'
+      ]);
+          Route::post('edit/{id}', [
+        'as' => 'ProductCategory.edit', 'uses' => 'ProductCategoryController@edit'  // Not Implemented Yet
+      ]);
+
     });
 });
